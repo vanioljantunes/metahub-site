@@ -69,7 +69,7 @@ body::after{
 ═══════════════════════════════════════ */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:200;
-  height:52px;display:flex;align-items:center;
+  height:52px;display:flex;align-items:center;justify-content:center;
   padding:0 12px;gap:4px;
   background:transparent;
   border-bottom:none;
@@ -146,7 +146,8 @@ body::after{
 .nav-apps-item svg{width:16px;height:16px;opacity:.7;flex-shrink:0;}
 .nav-sep{width:1px;height:20px;background:rgba(255,255,255,.07);margin:0 4px;flex-shrink:0;}
 .nav-right{
-  margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
   background:rgba(8,10,20,.92);
   border:1px solid rgba(255,255,255,.1);
   border-radius:var(--radius-md);
@@ -2231,8 +2232,6 @@ body::after{
 <!-- ── NAV ── -->
 <nav class="nav">
   <div class="nav-pill">
-    <span class="nav-brand">Meta<span>Hub</span></span>
-    <div class="nav-sep"></div>
     <div class="nav-apps-wrap">
       <button class="nav-item nav-apps-btn" id="navAppsBtn" onclick="toggleApps(event)" aria-haspopup="true" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
