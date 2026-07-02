@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UTI Abstracts · MetaHub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;0,800;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET & TOKENS ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#070a11;--surface:#0d1322;--surface2:#111a2e;
+  --border:rgba(255,255,255,.06);--border-h:rgba(255,255,255,.11);
+  --cyan:#00d9b4;--teal:#00c3d7;--blue:#378add;--purple:#9a94f5;
+  --text:#d4deee;--dim:rgba(255,255,255,.36);--muted:rgba(255,255,255,.16);
+  --r:14px;
+}
+body{background:var(--bg);font-family:'Outfit',sans-serif;color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 110% 80% at 12% 18%,rgba(0,195,215,.09) 0%,transparent 72%),
+    radial-gradient(ellipse 90% 70% at 88% 82%,rgba(55,138,221,.07) 0%,transparent 72%),
+    radial-gradient(ellipse 160% 100% at 50% 30%,rgba(0,217,180,.07) 0%,transparent 65%);}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.028'/%3E%3C/svg%3E"),
+    linear-gradient(rgba(0,195,215,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,195,215,.028) 1px,transparent 1px);
+  background-size:200px 200px,32px 32px,32px 32px;}
+.page{display:none;}.page.show{display:block;}
+
+/* ─── NAV ─── */
+.nav{display:flex;align-items:center;padding:0 28px;height:52px;
+  background:rgba(7,10,17,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:200;
+  box-shadow:0 1px 0 rgba(0,195,215,.04),0 4px 24px rgba(0,0,0,.3);}
+.nav-back{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:8px;
+  font-size:12.5px;font-weight:500;color:rgba(255,255,255,.5);cursor:pointer;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  text-decoration:none;transition:background .15s,color .15s;font-family:'Outfit',sans-serif;}
+.nav-back:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-back svg{width:14px;height:14px;}
+.nav-bc{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(255,255,255,.28);margin-left:16px;}
+.nav-bc .cur{color:rgba(255,255,255,.65);}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-tabs{display:flex;align-items:center;gap:2px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:3px;}
+.nav-tab{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:500;color:rgba(255,255,255,.38);cursor:pointer;transition:all .15s;font-family:'Outfit',sans-serif;border:none;background:none;}
+.nav-tab:hover{color:rgba(255,255,255,.65);}
+.nav-tab.active{background:rgba(0,195,215,.12);color:rgba(0,215,230,.9);border:1px solid rgba(0,195,215,.2);}
+
+/* ─── PAGE HEADER ─── */
+.pg-hdr{padding:26px 28px 0;display:flex;align-items:center;gap:14px;position:relative;z-index:1;}
+.pg-icon{width:38px;height:38px;border-radius:11px;background:rgba(0,195,215,.09);border:1px solid rgba(0,195,215,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pg-ttl{font-family:'Exo 2',sans-serif;font-size:21px;font-weight:700;color:#fff;letter-spacing:-.5px;}
+.pg-sub{font-size:11.5px;color:rgba(255,255,255,.28);margin-top:2px;}
+.cbar{padding:18px 28px 10px;font-size:9.5px;letter-spacing:.18em;color:rgba(255,255,255,.18);text-transform:uppercase;position:relative;z-index:1;}
+
+/* ─── CONTENT COLUMN ─── */
+.col{max-width:920px;margin:0 auto;padding:0 28px 100px;position:relative;z-index:1;}
+
+/* ─── HERO ROW (video + about) ─── */
+.hero-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:680px){.hero-row{grid-template-columns:1fr;}}
+
+/* ─── VIDEO CARD ─── */
+.video-card{border-radius:var(--r);overflow:hidden;background:#060e1c;border:1px solid rgba(0,195,215,.1);
+  aspect-ratio:16/9;position:relative;cursor:pointer;transition:border-color .28s,box-shadow .28s;}
+.video-card:hover{border-color:rgba(0,195,215,.28);box-shadow:0 0 48px rgba(0,195,215,.08),0 20px 60px rgba(0,0,0,.45);}
+.video-bg{position:absolute;inset:0;background:linear-gradient(140deg,#041420 0%,#071e36 45%,#040e1f 100%);}
+.video-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,195,215,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,195,215,.05) 1px,transparent 1px);background-size:38px 38px;}
+.video-card::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:72%;height:126px;background:radial-gradient(ellipse,rgba(0,195,215,.22) 0%,transparent 70%);pointer-events:none;}
+.video-inner{position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:space-between;padding:0 22px;}
+.video-inner h2{font-family:'Exo 2',sans-serif;font-size:20px;font-weight:800;color:#fff;line-height:1.3;letter-spacing:-.4px;}
+.video-inner h2 em{font-style:normal;color:var(--teal);text-shadow:0 0 20px rgba(0,195,215,.4);}
+.v-play{width:50px;height:50px;border-radius:50%;background:rgba(0,195,215,.12);border:1.5px solid rgba(0,195,215,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 24px rgba(0,195,215,.1);}
+.video-card:hover .v-play{background:rgba(0,195,215,.22);box-shadow:0 0 36px rgba(0,195,215,.28);transform:scale(1.1);}
+.v-play svg{width:17px;height:17px;margin-left:3px;}
+@keyframes play-ring{0%{transform:scale(1);opacity:.55;}70%{transform:scale(1.6);opacity:0;}100%{transform:scale(1.6);opacity:0;}}
+.v-play::before{content:'';position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(0,195,215,.35);animation:play-ring 2.2s ease-out infinite;pointer-events:none;}
+.video-card:hover .v-play::before{animation:none;}
+.video-scan{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:3;}
+@keyframes scanline{0%{transform:translateY(-100%);}100%{transform:translateY(100vh);}}
+.video-scan::after{content:'';position:absolute;left:0;right:0;height:108px;background:linear-gradient(to bottom,transparent 0%,rgba(0,195,215,.04) 50%,transparent 100%);animation:scanline 5s ease-in-out infinite;animation-delay:1s;}
+
+/* ─── ABOUT SIDE ─── */
+.about-side{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px;transition:border-color .2s;}
+.about-side:hover{border-color:var(--border-h);}
+.about-side p{font-size:12.5px;color:rgba(255,255,255,.46);line-height:1.8;}
+.about-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.pill{padding:4px 10px;border-radius:20px;font-size:10px;border:1px solid rgba(0,195,215,.22);color:rgba(0,195,215,.72);background:rgba(0,195,215,.05);white-space:nowrap;transition:border-color .15s,background .15s;}
+.pill:hover{border-color:rgba(0,195,215,.45);background:rgba(0,195,215,.1);}
+.about-head{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.about-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(0,195,215,.1);border:1px solid rgba(0,195,215,.2);color:rgba(0,215,230,.85);}
+.about-title{font-family:'Exo 2',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:-.3px;}
+
+/* ─── ACTION ROW ─── */
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+@media(max-width:580px){.action-row{grid-template-columns:1fr;}}
+.action-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px 26px;display:flex;flex-direction:column;align-items:flex-start;gap:11px;position:relative;overflow:hidden;min-height:172px;transition:border-color .28s,transform .28s cubic-bezier(.34,1.2,.64,1),box-shadow .28s;}
+.action-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;}
+.action-card.teal::before{background:radial-gradient(ellipse 130% 100% at -10% -10%,rgba(0,195,215,.14) 0%,transparent 70%);}
+.action-card.blue::before{background:radial-gradient(ellipse 130% 100% at -10% -10%,rgba(55,138,221,.14) 0%,transparent 70%);}
+.action-card:hover{transform:translateY(-3px);}
+.action-card:hover::before{opacity:1;}
+.action-card.teal:hover{border-color:rgba(0,195,215,.22);box-shadow:0 16px 48px rgba(0,0,0,.3),0 0 30px rgba(0,195,215,.05);}
+.action-card.blue:hover{border-color:rgba(55,138,221,.22);box-shadow:0 16px 48px rgba(0,0,0,.3),0 0 30px rgba(55,138,221,.05);}
+.action-card:active{transform:translateY(-1px);}
+.action-card.teal::after{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,195,215,.6),transparent);border-radius:0 0 4px 4px;}
+.action-card.blue::after{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,rgba(55,138,221,.6),transparent);border-radius:0 0 4px 4px;}
+.ac-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ac-title{font-family:'Exo 2',sans-serif;font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px;}
+.ac-desc{font-size:11.5px;color:rgba(255,255,255,.34);line-height:1.65;margin-bottom:4px;}
+.ac-btn{padding:10px 22px;border:none;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Exo 2',sans-serif;display:inline-flex;align-items:center;gap:7px;transition:opacity .15s,transform .2s cubic-bezier(.34,1.2,.64,1),box-shadow .2s;letter-spacing:.01em;}
+.ac-btn:hover{transform:translateY(-2px);}
+.ac-btn:active{transform:translateY(0);}
+.btn-teal{background:var(--teal);color:#050810;box-shadow:0 4px 22px rgba(0,195,215,.28);}
+.btn-teal:hover{box-shadow:0 6px 32px rgba(0,195,215,.45);}
+.btn-outline{background:rgba(55,138,221,.1);color:#5eaaee;border:1px solid rgba(55,138,221,.28)!important;}
+.btn-outline:hover{background:rgba(55,138,221,.18);border-color:rgba(55,138,221,.45)!important;}
+
+/* ─── DIVIDER ─── */
+.section-divider{display:flex;align-items:center;gap:16px;margin:52px 0 40px;color:rgba(255,255,255,.18);font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.07);}
+
+/* ─── RAFAEL HERO ─── */
+.rafael-hero{
+  position:relative;overflow:hidden;
+  border-radius:24px;
+  background:linear-gradient(160deg,#010a14 0%,#031520 50%,#01090f 100%);
+  border:1px solid rgba(0,195,215,.12);
+  min-height:480px;
+  display:flex;align-items:stretch;
+  margin-bottom:0;
+  box-shadow:
+    0 0 0 1px rgba(0,195,215,.05),
+    0 40px 80px rgba(0,0,0,.6),
+    0 0 120px rgba(0,195,215,.05);
+}
+.rafael-hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 90% at 75% 45%,rgba(0,195,215,.14) 0%,transparent 62%),
+    radial-gradient(ellipse 50% 70% at 22% 35%,rgba(55,138,221,.10) 0%,transparent 58%),
+    radial-gradient(ellipse 100% 45% at 50% 0%,rgba(0,195,215,.05) 0%,transparent 70%);
+}
+.rafael-grid-bg{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,195,215,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,195,215,.025) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.rafael-scan{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,rgba(0,0,0,.035) 3px,rgba(0,0,0,.035) 4px);
+}
+/* SVG circuit decoration */
+.rafael-circuit{
+  position:absolute;right:54%;top:50%;transform:translateY(-50%);
+  z-index:1;opacity:.06;pointer-events:none;
+}
+/* Photo container */
+.rafael-photo-wrap{
+  position:absolute;
+  right:0;top:0;bottom:0;
+  width:54%;
+  z-index:1;
+  overflow:hidden;
+}
+/* Left-side bleed: fade photo into content area */
+.rafael-photo-wrap::before{
+  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    linear-gradient(to right,#010a14 0%,rgba(1,10,20,.9) 8%,rgba(1,10,20,.3) 20%,transparent 38%),
+    linear-gradient(to top,#010a14 0%,rgba(1,10,20,.7) 6%,transparent 18%);
+}
+/* Teal radiant glow — sits BEHIND the photo layer */
+.rafael-photo-wrap::after{
+  content:'';position:absolute;
+  left:8%;top:-5%;width:84%;height:110%;
+  background:radial-gradient(ellipse 65% 72% at 48% 35%,rgba(0,195,215,.38) 0%,rgba(0,160,200,.15) 42%,transparent 68%);
+  filter:blur(28px);
+  z-index:0;pointer-events:none;
+  animation:rafaelGlow 6s ease-in-out infinite alternate;
+}
+@keyframes rafaelGlow{from{opacity:.8;}to{opacity:1;transform:scale(1.04);}}
+.rafael-photo{
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:center 5%;
+  display:block;
+  position:relative;z-index:1;
+  /*
+    Aggressive cutout mask:
+    — tight radial centered on his face/torso
+    — left edge fades to nothing (content side bleed)
+    — bottom fades to page bg
+    — top fades slightly
+  */
+  filter: brightness(1.06) contrast(1.03);
+}
+/* Teal color treatment — sits above photo, blends edges only */
+.rafael-photo-overlay{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(2,13,24,1) 0%,rgba(2,13,24,.9) 6%,rgba(2,13,24,.3) 16%,transparent 28%),
+    linear-gradient(to bottom,rgba(2,13,24,.4) 0%,transparent 12%);
+  mix-blend-mode:normal;
+}
+/* Left content */
+.rafael-content{
+  position:relative;z-index:2;
+  width:52%;
+  padding:52px 40px 52px 52px;
+  display:flex;flex-direction:column;gap:18px;
+  justify-content:center;
+}
+.rafael-eyebrow{
+  font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;
+  color:rgba(0,215,230,.7);
+  display:flex;align-items:center;gap:10px;
+}
+.rafael-eyebrow::before{content:'';width:24px;height:1px;background:rgba(0,195,215,.4);}
+.rafael-name{
+  font-family:'Exo 2',sans-serif;
+  font-size:clamp(28px,3.5vw,44px);font-weight:800;
+  color:#fff;letter-spacing:-.03em;line-height:1.05;
+}
+.rafael-name em{font-style:normal;color:var(--teal);text-shadow:0 0 32px rgba(0,195,215,.4);}
+.rafael-md{font-style:normal;font-size:.55em;color:rgba(255,255,255,.45);font-weight:600;letter-spacing:.02em;vertical-align:baseline;margin-left:3px;}
+.rafael-credentials{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:rgba(255,255,255,.38);
+  font-style:italic;letter-spacing:.01em;
+}
+.rafael-role-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:7px 16px;border-radius:20px;
+  font-size:11.5px;font-weight:600;letter-spacing:.04em;
+  background:rgba(0,195,215,.08);border:1px solid rgba(0,195,215,.22);color:rgba(0,220,240,.85);
+  width:fit-content;
+}
+.rafael-role-badge svg{width:13px;height:13px;opacity:.7;}
+.rafael-desc{font-size:13px;color:rgba(255,255,255,.42);line-height:1.82;max-width:380px;}
+.rafael-stats{display:flex;gap:32px;margin-top:4px;}
+.rafael-stat{display:flex;flex-direction:column;gap:3px;}
+.rafael-stat-num{font-family:'Exo 2',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1;}
+.rafael-stat-num em{font-style:normal;color:var(--teal);text-shadow:0 0 20px rgba(0,195,215,.35);}
+.rafael-stat-lbl{font-size:9.5px;color:rgba(255,255,255,.28);letter-spacing:.08em;text-transform:uppercase;}
+.rafael-wa-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:11px 22px;border-radius:10px;
+  background:rgba(0,195,215,.1);border:1px solid rgba(0,195,215,.25);
+  color:rgba(0,220,240,.9);font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Outfit',sans-serif;text-decoration:none;width:fit-content;
+  transition:background .2s,box-shadow .2s,transform .2s cubic-bezier(.34,1.2,.64,1);
+}
+.rafael-wa-btn:hover{background:rgba(0,195,215,.18);box-shadow:0 0 28px rgba(0,195,215,.12);transform:translateY(-2px);}
+.rafael-wa-btn svg{width:14px;height:14px;}
+/* Teal accent line at top */
+.rafael-hero::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(0,195,215,.5) 30%,rgba(55,138,221,.3) 70%,transparent);
+}
+/* floating badge top-right */
+.rafael-float-badge{
+  position:absolute;top:24px;right:28px;z-index:3;
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 14px;border-radius:20px;
+  background:rgba(7,10,17,.8);border:1px solid rgba(0,195,215,.2);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(0,215,230,.7);
+}
+.rafael-float-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(0,195,215,.8);}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.fu{animation:fadeUp .5s ease both;}
+.d1{animation-delay:.06s;}.d2{animation-delay:.14s;}.d3{animation-delay:.22s;}.d4{animation-delay:.30s;}.d5{animation-delay:.38s;}
+
+/* ═══════════════════════════════
+   FORM PAGE
+═══════════════════════════════ */
+.fp-prog{height:2px;background:rgba(255,255,255,.05);position:sticky;top:52px;z-index:100;}
+.fp-prog-fill{height:2px;background:linear-gradient(90deg,var(--teal),#0fc898);width:0%;transition:width .4s cubic-bezier(.4,0,.2,1);}
+.fp-body{max-width:680px;margin:0 auto;padding:36px 28px 100px;}
+.fp-header{margin-bottom:28px;}
+.fp-header h1{font-family:'Exo 2',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-.4px;}
+.fp-header p{font-size:12.5px;color:rgba(255,255,255,.35);line-height:1.65;}
+.back-btn{display:inline-flex;align-items:center;gap:7px;padding:7px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;color:rgba(255,255,255,.38);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .15s;margin-bottom:22px;}
+.back-btn:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.65);border-color:rgba(255,255,255,.11);}
+
+/* Step indicator */
+.step-indicator{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px;}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Exo 2',sans-serif;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03);color:rgba(255,255,255,.28);transition:all .3s;}
+.step-dot.active{background:rgba(0,195,215,.12);border-color:var(--teal);color:var(--teal);box-shadow:0 0 14px rgba(0,195,215,.2);}
+.step-dot.done{background:var(--teal);border-color:var(--teal);color:#050810;}
+.step-label{font-size:9px;color:rgba(255,255,255,.18);letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;transition:color .3s;}
+.step-label.active{color:rgba(0,195,215,.8);}
+.step-label.done{color:rgba(255,255,255,.38);}
+.step-line{width:36px;height:1px;background:rgba(255,255,255,.06);margin-bottom:20px;flex-shrink:0;transition:background .3s;}
+.step-line.done{background:rgba(0,195,215,.35);}
+
+/* Form step pages */
+.fstep{display:none;animation:fadeSlide .32s ease;}
+.fstep.active{display:block;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(9px);}to{opacity:1;transform:translateY(0);}}
+
+/* Welcome card */
+.welcome-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:20px;}
+.welcome-header{background:linear-gradient(135deg,rgba(0,195,215,.07) 0%,rgba(55,138,221,.05) 100%);border-bottom:1px solid rgba(0,195,215,.1);padding:22px 24px;display:flex;align-items:center;gap:14px;}
+.welcome-icon{width:42px;height:42px;border-radius:11px;background:rgba(0,195,215,.09);border:1px solid rgba(0,195,215,.22);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.welcome-header-text h2{font-family:'Exo 2',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:3px;letter-spacing:-.3px;}
+.welcome-header-text p{font-size:11px;color:rgba(255,255,255,.32);}
+.welcome-body{padding:22px 24px;}
+.welcome-section{margin-bottom:22px;}.welcome-section:last-child{margin-bottom:0;}
+.welcome-section-title{font-size:9.5px;letter-spacing:.18em;color:var(--teal);text-transform:uppercase;font-weight:600;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
+.welcome-section-title::after{content:'';flex:1;height:1px;background:rgba(0,195,215,.14);}
+.welcome-text{font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.78;}
+.welcome-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px;}
+.welcome-list li{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:rgba(255,255,255,.45);line-height:1.62;}
+.wl-icon{width:20px;height:20px;border-radius:5px;background:rgba(0,195,215,.07);border:1px solid rgba(0,195,215,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.wl-no-icon{width:20px;height:20px;border-radius:5px;background:rgba(232,93,93,.07);border:1px solid rgba(232,93,93,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.welcome-signature{margin-top:20px;padding:14px 16px;background:rgba(0,195,215,.03);border:1px solid rgba(0,195,215,.1);border-radius:10px;font-size:12px;color:rgba(255,255,255,.38);line-height:1.75;}
+.welcome-signature strong{color:rgba(255,255,255,.62);}
+
+/* Form fields */
+.fsec{margin-bottom:28px;}
+.fsec-ttl{font-size:9.5px;letter-spacing:.18em;color:var(--teal);text-transform:uppercase;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid rgba(0,195,215,.12);font-weight:600;}
+.frow{display:grid;gap:12px;margin-bottom:12px;}.frow.two{grid-template-columns:1fr 1fr;}
+.fg{display:flex;flex-direction:column;gap:6px;}
+.fg label{font-size:11px;color:rgba(255,255,255,.32);letter-spacing:.03em;}
+.req{color:#e05d5d;}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 13px;font-size:13px;color:var(--text);font-family:'Outfit',sans-serif;outline:none;width:100%;transition:border-color .2s,background .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:rgba(0,195,215,.4);background:rgba(0,195,215,.02);}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,.16);}
+.fg select option{background:#0c0e14;}
+
+/* Checklist */
+.cl-box{background:rgba(0,195,215,.03);border:1px solid rgba(0,195,215,.12);border-radius:11px;padding:16px 20px;margin-bottom:24px;}
+.cl-ttl{font-size:9.5px;font-weight:600;color:var(--teal);letter-spacing:.12em;margin-bottom:12px;text-transform:uppercase;display:flex;align-items:center;gap:6px;}
+.cl-row{display:flex;gap:9px;align-items:flex-start;margin-bottom:7px;font-size:12px;color:rgba(255,255,255,.4);line-height:1.55;}
+.cl-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);margin-top:6px;flex-shrink:0;}
+
+/* File upload */
+.upl-zone{border:1.5px dashed rgba(0,195,215,.18);border-radius:11px;padding:18px 14px;text-align:center;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.upl-zone:hover,.upl-zone.drag-over{border-color:rgba(0,195,215,.45);background:rgba(0,195,215,.03);}
+.upl-zone.has-file{border-color:rgba(0,195,215,.38);border-style:solid;background:rgba(0,195,215,.04);}
+.upl-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upl-icon{margin:0 auto 6px;opacity:.45;}
+.upl-lbl{font-size:12px;color:rgba(255,255,255,.38);margin-bottom:2px;}
+.upl-hint{font-size:10px;color:rgba(255,255,255,.18);}
+.upl-filename{font-size:12px;color:var(--teal);margin-top:6px;font-weight:500;display:none;}
+.upl-zone.has-file .upl-filename{display:block;}
+.upl-zone.has-file .upl-lbl,.upl-zone.has-file .upl-icon,.upl-zone.has-file .upl-hint{display:none;}
+.upl-check{display:none;width:18px;height:18px;border-radius:50%;background:var(--teal);margin:0 auto 4px;align-items:center;justify-content:center;}
+.upl-zone.has-file .upl-check{display:flex;}
+
+/* Checkboxes */
+.ck-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
+.ck-item{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:rgba(255,255,255,.4);line-height:1.45;cursor:pointer;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.05);transition:all .15s;}
+.ck-item:hover{background:rgba(255,255,255,.03);}
+.ck-item input{accent-color:var(--teal);margin-top:2px;flex-shrink:0;}
+.ck-item input:checked+span{color:rgba(255,255,255,.68);}
+
+/* Waiver */
+.waiver-box{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:11px;padding:16px 18px;font-size:12px;color:rgba(255,255,255,.3);line-height:1.78;margin-bottom:16px;}
+.waiver-ck{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:rgba(255,255,255,.52);cursor:pointer;line-height:1.5;padding:12px 14px;background:rgba(0,195,215,.03);border:1px solid rgba(0,195,215,.13);border-radius:10px;}
+.waiver-ck input{accent-color:var(--teal);margin-top:3px;flex-shrink:0;}
+
+/* Nav buttons */
+.form-nav{display:flex;gap:10px;margin-top:32px;}
+.f-btn-sec{flex:1;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;color:rgba(255,255,255,.38);font-size:13px;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .15s;}
+.f-btn-sec:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6);}
+.f-btn-pri{flex:2;padding:12px;background:linear-gradient(135deg,var(--teal),#0fc898);border:none;border-radius:10px;color:#050810;font-size:14px;font-weight:700;font-family:'Exo 2',sans-serif;cursor:pointer;transition:all .2s;letter-spacing:.02em;box-shadow:0 4px 22px rgba(0,195,215,.22);}
+.f-btn-pri:hover{transform:translateY(-1px);box-shadow:0 6px 32px rgba(0,195,215,.38);}
+.f-btn-pri:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none;}
+.f-success{display:none;flex-direction:column;align-items:center;justify-content:center;padding:80px 28px;text-align:center;}
+.f-success.show{display:flex;}
+.fs-icon{width:60px;height:60px;border-radius:50%;background:rgba(0,195,215,.09);border:1.5px solid rgba(0,195,215,.32);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.fs-title{font-family:'Exo 2',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:8px;letter-spacing:-.4px;}
+.fs-sub{font-size:13px;color:rgba(255,255,255,.38);line-height:1.82;margin-bottom:22px;max-width:440px;}
+.fs-back{padding:11px 26px;background:var(--teal);border:none;border-radius:10px;font-size:13px;font-weight:700;color:#050810;cursor:pointer;font-family:'Exo 2',sans-serif;box-shadow:0 4px 22px rgba(0,195,215,.28);transition:box-shadow .2s,transform .2s;}
+.fs-back:hover{box-shadow:0 6px 32px rgba(0,195,215,.42);transform:translateY(-1px);}
+
+/* ═══════════════════════════════
+   TRACKING PAGE — MY ABSTRACTS
+═══════════════════════════════ */
+.tp-body{max-width:760px;margin:0 auto;padding:0 28px 80px;}
+.tp-header{padding:28px 0 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.tp-title{font-family:'Exo 2',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.4px;}
+.tp-count{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;background:rgba(0,195,215,.07);border:1px solid rgba(0,195,215,.18);border-radius:20px;font-size:10px;color:var(--teal);font-weight:600;}
+.tp-add-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:9px;background:var(--teal);color:#050810;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Exo 2',sans-serif;border:none;transition:opacity .15s,transform .15s cubic-bezier(.34,1.2,.64,1);box-shadow:0 4px 16px rgba(0,195,215,.22);}
+.tp-add-btn:hover{opacity:.88;transform:translateY(-1px);}
+.tp-add-btn svg{width:13px;height:13px;}
+.papers-stack{display:flex;flex-direction:column;gap:10px;}
+.p-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s;}
+.p-card:hover{border-color:var(--border-h);}
+.p-card-header{display:flex;align-items:center;gap:12px;padding:16px 18px;cursor:pointer;user-select:none;}
+.p-status-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:1px;}
+.p-hdr-main{flex:1;min-width:0;}
+.p-hdr-title{font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
+.p-hdr-meta{display:flex;align-items:center;gap:8px;}
+.p-hdr-meta span{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:3px;}
+.p-hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.p-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;border:1px solid transparent;}
+.b-aguardando{background:rgba(245,197,66,.12);color:#f5c542;border-color:rgba(245,197,66,.28);}
+.b-noshow{background:rgba(255,90,90,.12);color:#ff7070;border-color:rgba(255,90,90,.28);}
+.b-corrigido{background:rgba(153,148,245,.15);color:#9a94f5;border-color:rgba(153,148,245,.3);}
+.b-aceito{background:rgba(0,195,215,.15);color:var(--teal);border-color:rgba(0,195,215,.3);}
+.p-chevron{color:rgba(255,255,255,.25);transition:transform .2s;}
+.p-card.open .p-chevron{transform:rotate(90deg);}
+
+/* Card body (collapsed by default) */
+.p-card-body{display:none;padding:0 18px 18px;}
+.p-card.open .p-card-body{display:block;}
+
+/* Journey */
+.journey-section{background:linear-gradient(135deg,rgba(13,19,30,1) 0%,rgba(16,22,36,1) 100%);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px 20px;position:relative;overflow:hidden;}
+.journey-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(0,195,215,.04) 0%,transparent 70%);pointer-events:none;}
+.journey-label{font-family:'Exo 2',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase;margin-bottom:20px;}
+.journey-track{display:flex;align-items:flex-start;gap:0;position:relative;padding-top:8px;}
+.jstep{display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;flex:1;}
+.jstep-node{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:2;transition:all .25s;border:2px solid transparent;background:none;padding:0;cursor:default;}
+.jstep-node.done{background:linear-gradient(135deg,rgba(0,195,215,.22),rgba(0,195,215,.08));border-color:var(--teal);box-shadow:0 0 0 4px rgba(0,195,215,.07);}
+.jstep-node.done svg{color:var(--teal);}
+.jstep-node.done::after{content:'✓';position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--teal);color:#0c0e14;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);}
+.jstep-node.active{background:linear-gradient(135deg,rgba(55,138,221,.3),rgba(55,138,221,.1));border-color:var(--blue);box-shadow:0 0 0 5px rgba(55,138,221,.1),0 0 20px rgba(55,138,221,.2);}
+.jstep-node.active svg{color:var(--blue);}
+@keyframes pulse-ring{0%{transform:scale(1);opacity:.6}70%{transform:scale(1.55);opacity:0}100%{transform:scale(1.55);opacity:0}}
+.jstep-node.active::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--blue);animation:pulse-ring 2s ease-out infinite;}
+.jstep-node.locked{background:rgba(255,255,255,.015);border-color:rgba(255,255,255,.05);opacity:.35;}
+.jstep-node.locked svg{color:rgba(255,255,255,.15);}
+.jstep-connector{flex:1;height:3px;margin-top:22px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;}
+.jstep-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--blue));}
+.jstep-fill.full{width:100%;}.jstep-fill.half{width:50%;}.jstep-fill.none{width:0%;}
+.jstep-lbl{font-size:9px;font-weight:700;text-align:center;line-height:1.3;letter-spacing:.04em;text-transform:uppercase;max-width:68px;}
+.jstep-lbl.done{color:var(--teal);}.jstep-lbl.active{color:var(--blue);}.jstep-lbl.locked{color:rgba(255,255,255,.1);}
+
+/* Reviewer row */
+.reviewer-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:9px;margin-top:12px;}
+.rev-photo{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(0,195,215,.2);flex-shrink:0;}
+.rev-photo img{width:100%;height:100%;object-fit:cover;}
+.rev-name{font-size:12px;font-weight:500;color:var(--text);}
+.rev-role{font-size:10px;color:rgba(255,255,255,.3);}
+.rev-wa{margin-left:auto;display:flex;align-items:center;gap:5px;padding:6px 13px;background:rgba(0,195,215,.07);border:1px solid rgba(0,195,215,.2);border-radius:6px;font-size:11px;color:var(--teal);text-decoration:none;white-space:nowrap;cursor:pointer;}
+.rev-wa:hover{background:rgba(0,195,215,.14);}
+.feedback-card{background:rgba(0,195,215,.04);border:1px solid rgba(0,195,215,.15);border-radius:10px;padding:14px 16px;margin-top:12px;}
+.fb-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.fb-photo{width:26px;height:26px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(0,195,215,.25);flex-shrink:0;}
+.fb-photo img{width:100%;height:100%;object-fit:cover;}
+.fb-from{font-size:11px;font-weight:600;color:var(--teal);}
+.fb-date{font-size:10px;color:rgba(255,255,255,.25);margin-left:auto;}
+.fb-text{font-size:12px;color:rgba(255,255,255,.55);line-height:1.75;}
+.sec-mini-label{font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.25);text-transform:uppercase;margin-bottom:8px;margin-top:14px;}
+.files-grid{display:flex;flex-direction:column;gap:5px;}
+.file-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:border-color .15s;}
+.file-row:hover{border-color:rgba(0,195,215,.3);}
+.file-icon{width:22px;height:22px;border-radius:5px;background:rgba(0,195,215,.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.file-name{font-size:11px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.file-size{font-size:10px;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+
+/* Upload overlay */
+.sub-overlay{display:none;position:fixed;inset:0;background:rgba(7,10,17,.88);backdrop-filter:blur(10px);z-index:999;align-items:center;justify-content:center;flex-direction:column;}
+.sub-overlay.show{display:flex;}
+.sub-overlay-card{display:flex;flex-direction:column;align-items:center;gap:22px;padding:38px 42px;background:var(--surface);border:1px solid rgba(0,195,215,.14);border-radius:24px;box-shadow:0 40px 80px rgba(0,0,0,.6);max-width:400px;width:90%;}
+.sub-txt-label{font-family:'Exo 2',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:5px;text-align:center;}
+.sub-txt{font-size:12px;color:rgba(255,255,255,.35);text-align:center;}
+.sub-progress-bar-wrap{width:100%;height:2px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;}
+.sub-progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:2px;transition:width .4s ease;width:5%;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.sub-spinner{width:32px;height:32px;border:2.5px solid rgba(0,195,215,.2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;}
+
+/* Embedded mode */
+body.embedded .nav{display:none!important;}
+body.embedded .page{padding-top:0;}
+</style>
+</head>
+<body>
+<script>if(new URLSearchParams(location.search).get('embedded')==='1')document.body.classList.add('embedded');</script>
+
+<!-- ──────── NAV ──────── -->
+<nav class="nav" id="mainNav">
+  <a href="welcome.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Voltar
+  </a>
+  <div class="nav-bc">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="8" height="8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <span class="cur">UTI Abstracts</span>
+  </div>
+  <div class="nav-right">
+    <div class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-page="landing">Overview</button>
+      <button class="nav-tab" data-page="form">Submeter</button>
+      <button class="nav-tab" data-page="track">My Abstracts</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     PAGE 0 — LANDING
+══════════════════════════════════════════ -->
+<div class="page show" id="page-landing">
+
+  <div class="pg-center-ttl fu" style="text-align:center;padding:32px 28px 24px;position:relative;z-index:1;">
+    <div style="font-family:'Exo 2',sans-serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:-.5px;">UTI dos Abstracts</div>
+  </div>
+
+  <div class="col">
+
+    <!-- Hero row: text + calendar -->
+    <div class="hero-row fu d2">
+
+      <!-- Text side -->
+      <div class="about-side">
+        <p>The goal of Abstract ICU is simple: review your abstract live and show, in practice, what actually increases your chances of acceptance at international conferences.</p>
+        <p>It is a monthly live session where you can receive real-time feedback on your abstracts. During the meeting, we analyze the structure, clarity, and scientific language of each abstract and revise it together.</p>
+        <p>No theory.</p>
+        <p>Just clear feedback on structure, clarity, and the common mistakes that lead to rejection.</p>
+      </div>
+
+      <!-- Calendar card -->
+      <div class="about-side" style="gap:0;padding:20px;" id="calendarCard">
+        <!-- header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+          <button onclick="calNav(-1)" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.5);transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" width="10" height="10"><path d="M6 2L3 5l3 3"/></svg>
+          </button>
+          <div style="font-family:'Exo 2',sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:.3px;" id="calMonthLabel"></div>
+          <button onclick="calNav(1)" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.5);transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" width="10" height="10"><path d="M4 2l3 3-3 3"/></svg>
+          </button>
+        </div>
+        <!-- day names -->
+        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px;">
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">S</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">M</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">T</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">W</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">T</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">F</div>
+          <div style="text-align:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.25);padding:4px 0;">S</div>
+        </div>
+        <!-- grid -->
+        <div id="calGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;flex:1;"></div>
+        <!-- session badge -->
+        <div style="position:relative;" id="calBadgeWrap">
+          <div id="calBadge" style="margin-top:16px;padding:10px 14px;background:rgba(0,195,215,.07);border:1px solid rgba(0,195,215,.18);border-radius:8px;display:flex;align-items:center;gap:10px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;box-shadow:0 0 8px rgba(0,195,215,.6);"></div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:10px;font-weight:600;color:rgba(0,195,215,.7);letter-spacing:.4px;text-transform:uppercase;margin-bottom:2px;">Next session</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.75);" id="calNextLabel">—</div>
+            </div>
+            <button id="tzBtn" onclick="toggleTzPopover(event)" title="Ver em outros fusos horários"
+              style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,.4);transition:background .15s,color .15s,border-color .15s;flex-shrink:0;padding:0;"
+              onmouseover="this.style.background='rgba(0,195,215,.12)';this.style.color='rgba(0,195,215,.9)';this.style.borderColor='rgba(0,195,215,.3)'"
+              onmouseout="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.4)';this.style.borderColor='rgba(255,255,255,.1)'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Timezone popover -->
+          <div id="tzPopover" style="display:none;position:absolute;bottom:calc(100% + 6px);left:0;right:0;background:#081620;border:1px solid rgba(0,195,215,.22);border-radius:10px;padding:13px 14px;z-index:100;box-shadow:0 12px 40px rgba(0,0,0,.55),0 0 0 1px rgba(0,195,215,.05);">
+            <div style="font-size:9px;font-weight:700;color:rgba(0,195,215,.55);letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px;">Fusos horários</div>
+            <div id="tzList" style="display:flex;flex-direction:column;gap:6px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /hero-row -->
+
+    <script>
+    (function(){
+      // ── Configure the Abstract ICU session date here ──
+      const SESSION_DAY = 26; // day of month
+      const SESSION_MONTH = 6; // 1-based month (6 = June)
+      const SESSION_YEAR = 2026;
+      const SESSION_TIME = '20:00'; // 24h format
+      // ─────────────────────────────────────────────────
+
+      const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      let viewYear = SESSION_YEAR, viewMonth = SESSION_MONTH - 1;
+
+      function render() {
+        const label = document.getElementById('calMonthLabel');
+        const grid  = document.getElementById('calGrid');
+        const badge = document.getElementById('calNextLabel');
+        if (!label || !grid) return;
+
+        label.textContent = MONTHS[viewMonth] + ' ' + viewYear;
+
+        const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+        const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+        const today = new Date();
+        const isSessionMonth = (viewMonth === SESSION_MONTH - 1 && viewYear === SESSION_YEAR);
+
+        let html = '';
+        for (let i = 0; i < firstDay; i++) {
+          html += '<div></div>';
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const isToday = (d === today.getDate() && viewMonth === today.getMonth() && viewYear === today.getFullYear());
+          const isSession = isSessionMonth && d === SESSION_DAY;
+          let style = 'text-align:center;font-size:11.5px;padding:5px 2px;border-radius:5px;cursor:default;';
+          if (isSession) {
+            style += 'background:var(--teal);color:#000;font-weight:700;box-shadow:0 0 12px rgba(0,195,215,.35);';
+          } else if (isToday) {
+            style += 'background:rgba(255,255,255,.08);color:#fff;font-weight:600;';
+          } else {
+            style += 'color:rgba(255,255,255,' + (d < today.getDate() && !isSessionMonth ? '.2' : '.45') + ');';
+          }
+          html += '<div style="' + style + '">' + d + '</div>';
+        }
+        grid.innerHTML = html;
+
+        // badge — show date + time in BRT
+        const sessionDate = new Date(SESSION_YEAR, SESSION_MONTH - 1, SESSION_DAY);
+        badge.textContent = sessionDate.toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'}) + ' · ' + SESSION_TIME + ' BRT';
+
+        // Build UTC moment for this session (BRT = UTC-3, so add 3h)
+        const [sh, sm] = SESSION_TIME.split(':').map(Number);
+        const sessionUTC = new Date(Date.UTC(SESSION_YEAR, SESSION_MONTH - 1, SESSION_DAY, sh + 3, sm, 0));
+
+        // Populate timezone popover
+        const zones = [
+          {flag:'🇧🇷', label:'Brasília', tz:'America/Sao_Paulo'},
+          {flag:'🇺🇸', label:'New York', tz:'America/New_York'},
+          {flag:'🇬🇧', label:'London',   tz:'Europe/London'},
+          {flag:'🇵🇹', label:'Lisboa',   tz:'Europe/Lisbon'},
+          {flag:'🇩🇪', label:'Berlin',   tz:'Europe/Berlin'},
+          {flag:'🇦🇺', label:'Sydney',   tz:'Australia/Sydney'},
+        ];
+        const tzList = document.getElementById('tzList');
+        if (tzList) {
+          tzList.innerHTML = zones.map(function(z) {
+            const timeFmt = new Intl.DateTimeFormat('en-US', {hour:'2-digit', minute:'2-digit', hour12:false, timeZone:z.tz});
+            const tzFmt   = new Intl.DateTimeFormat('en-US', {timeZoneName:'short', timeZone:z.tz});
+            const dayFmt  = new Intl.DateTimeFormat('en-US', {day:'numeric', timeZone:z.tz});
+            const time    = timeFmt.format(sessionUTC);
+            const tzName  = tzFmt.formatToParts(sessionUTC).find(function(p){return p.type==='timeZoneName';})?.value || '';
+            const localDay = parseInt(dayFmt.format(sessionUTC));
+            const isNextDay = localDay !== SESSION_DAY;
+            const isRef = z.tz === 'America/Sao_Paulo';
+            return '<div style="display:flex;align-items:center;gap:9px;padding:4px ' + (isRef ? '8' : '2') + 'px;border-radius:6px;background:' + (isRef ? 'rgba(0,195,215,.08)' : 'transparent') + ';">'
+              + '<span style="font-size:14px;line-height:1;flex-shrink:0;">' + z.flag + '</span>'
+              + '<span style="font-size:11.5px;color:rgba(255,255,255,.45);flex:1;">' + z.label + '</span>'
+              + (isNextDay ? '<span style="font-size:9px;color:rgba(255,255,255,.22);margin-right:-2px;">+1d</span>' : '')
+              + '<span style="font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:' + (isRef ? 'rgba(0,195,215,.95)' : 'rgba(255,255,255,.75)') + ';">' + time + '</span>'
+              + '<span style="font-size:9.5px;color:rgba(255,255,255,.22);min-width:30px;text-align:right;">' + tzName + '</span>'
+              + '</div>';
+          }).join('');
+        }
+      }
+
+      window.calNav = function(dir) {
+        viewMonth += dir;
+        if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+        if (viewMonth < 0)  { viewMonth = 11; viewYear--; }
+        render();
+      };
+
+      window.toggleTzPopover = function(e) {
+        e.stopPropagation();
+        var pop = document.getElementById('tzPopover');
+        if (!pop) return;
+        var isOpen = pop.style.display !== 'none';
+        pop.style.display = isOpen ? 'none' : 'block';
+        if (!isOpen) {
+          var closeHandler = function(ev) {
+            var wrap = document.getElementById('calBadgeWrap');
+            if (wrap && !wrap.contains(ev.target)) {
+              pop.style.display = 'none';
+              document.removeEventListener('click', closeHandler);
+            }
+          };
+          setTimeout(function(){ document.addEventListener('click', closeHandler); }, 0);
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', render);
+      if (document.readyState !== 'loading') render();
+    })();
+    </script>
+
+    <!-- Action cards -->
+    <div class="action-row fu d3">
+
+      <div class="action-card teal" onclick="goPage('form')">
+        <div class="ac-icon" style="background:rgba(0,195,215,.09);border:1px solid rgba(0,195,215,.2);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+        </div>
+        <div class="ac-title">Submeter Abstract</div>
+        <div class="ac-desc">Envie seu abstract para revisão especializada.</div>
+        <button class="ac-btn btn-teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          Iniciar submissão
+        </button>
+      </div>
+
+      <div class="action-card blue" onclick="goPage('track')">
+        <div class="ac-icon" style="background:rgba(55,138,221,.09);border:1px solid rgba(55,138,221,.2);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="ac-title">My Abstracts</div>
+        <div class="ac-desc">Acompanhe o status dos seus abstracts submetidos, feedbacks recebidos e próximos passos.</div>
+        <button class="ac-btn btn-outline">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          Ver meus abstracts
+        </button>
+      </div>
+
+    </div><!-- /action-row -->
+
+    <!-- Live meeting link card -->
+    <a href="#" id="liveMeetingLink" class="fu d4" style="display:flex;align-items:center;gap:16px;background:var(--surface);border:1px solid rgba(0,195,215,.15);border-radius:var(--r);padding:16px 20px;text-decoration:none;transition:border-color .2s,background .2s;margin-bottom:0;" onmouseover="this.style.borderColor='rgba(0,195,215,.35)';this.style.background='rgba(0,195,215,.04)'" onmouseout="this.style.borderColor='rgba(0,195,215,.15)';this.style.background='var(--surface)'">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(0,195,215,.09);border:1px solid rgba(0,195,215,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+          <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+        </svg>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Exo 2',sans-serif;font-size:13px;font-weight:700;color:#fff;margin-bottom:2px;">Join the live session</div>
+        <div style="font-size:11.5px;color:rgba(255,255,255,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Live meeting link — Abstract ICU</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px rgba(0,195,215,.6);"></div>
+        <span style="font-size:11px;font-weight:600;color:var(--teal);letter-spacing:.3px;text-transform:uppercase;">Live</span>
+        <svg viewBox="0 0 10 10" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1.5" width="10" height="10" style="margin-left:8px;"><path d="M4 2l3 3-3 3"/></svg>
+      </div>
+    </a>
+
+    <!-- DIVIDER + RAFAEL HERO -->
+    <div class="section-divider fu d4">Coordenador</div>
+
+    <!-- Rafael M. hero -->
+    <div class="rafael-hero fu d5">
+      <div class="rafael-grid-bg"></div>
+      <div class="rafael-scan"></div>
+      <!-- Circuit lines decoration -->
+      <svg class="rafael-circuit" width="220" height="320" viewBox="0 0 220 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="60" r="5" stroke="white" stroke-width="1.2"/>
+        <circle cx="110" cy="30" r="4" stroke="white" stroke-width="1.2"/>
+        <circle cx="180" cy="80" r="5" stroke="white" stroke-width="1.2"/>
+        <circle cx="70" cy="140" r="4" stroke="white" stroke-width="1.2"/>
+        <circle cx="150" cy="160" r="5" stroke="white" stroke-width="1.2"/>
+        <circle cx="30" cy="220" r="4" stroke="white" stroke-width="1.2"/>
+        <circle cx="110" cy="250" r="5" stroke="white" stroke-width="1.2"/>
+        <circle cx="190" cy="230" r="4" stroke="white" stroke-width="1.2"/>
+        <line x1="40" y1="60" x2="110" y2="30" stroke="white" stroke-width=".8" opacity=".6"/>
+        <line x1="110" y1="30" x2="180" y2="80" stroke="white" stroke-width=".8" opacity=".6"/>
+        <line x1="40" y1="60" x2="70" y2="140" stroke="white" stroke-width=".8" opacity=".5"/>
+        <line x1="180" y1="80" x2="150" y2="160" stroke="white" stroke-width=".8" opacity=".5"/>
+        <line x1="70" y1="140" x2="150" y2="160" stroke="white" stroke-width=".8" opacity=".4"/>
+        <line x1="70" y1="140" x2="30" y2="220" stroke="white" stroke-width=".8" opacity=".4"/>
+        <line x1="150" y1="160" x2="190" y2="230" stroke="white" stroke-width=".8" opacity=".4"/>
+        <line x1="30" y1="220" x2="110" y2="250" stroke="white" stroke-width=".8" opacity=".3"/>
+        <line x1="110" y1="250" x2="190" y2="230" stroke="white" stroke-width=".8" opacity=".3"/>
+        <circle cx="40" cy="60" r="2" fill="white" opacity=".4"/>
+        <circle cx="110" cy="30" r="2" fill="white" opacity=".4"/>
+        <circle cx="150" cy="160" r="2" fill="white" opacity=".5"/>
+      </svg>
+
+      <!-- Photo -->
+      <div class="rafael-photo-wrap">
+        <img class="rafael-photo" src="team/Rafael M.jpeg" alt="Rafael Morgado">
+        <div class="rafael-photo-overlay"></div>
+      </div>
+
+      <!-- Floating badge -->
+      <div class="rafael-float-badge">Coordinator</div>
+
+      <!-- Content -->
+      <div class="rafael-content">
+        <div class="rafael-name">Rafael<br><em>Morgado</em><span class="rafael-md">, MD</span></div>
+
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="rafael-role-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Coordenador da UTI dos Abstracts
+          </div>
+        </div>
+
+        <p class="rafael-desc">
+          Médico pela Universidade Federal de Santa Catarina. Coordena a revisão de todos os abstracts submetidos à UTI dos Abstracts.
+        </p>
+
+        <div class="rafael-stats">
+          <div class="rafael-stat">
+            <div class="rafael-stat-num"><em>120+</em></div>
+            <div class="rafael-stat-lbl">Abstracts revisados</div>
+          </div>
+        </div>
+
+        <a class="rafael-wa-btn" href="mailto:metawriters@metaanalysis.academy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Entrar em contato
+        </a>
+      </div>
+    </div><!-- /rafael-hero -->
+
+  </div><!-- /col -->
+</div><!-- /page-landing -->
+
+<!-- ══════════════════════════════════════════
+     PAGE 1 — FORM
+══════════════════════════════════════════ -->
+<div class="page" id="page-form">
+  <div class="fp-prog"><div class="fp-prog-fill" id="fpFill"></div></div>
+  <div class="fp-body">
+
+    <!-- Form steps: 0=intro, 1=dados, 2=abstract, 3=revisao, success -->
+    <div class="f-success" id="fSuccess">
+      <div class="fs-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="fs-title">Abstract submetido!</div>
+      <div class="fs-sub">Seu abstract foi enviado com sucesso. Rafael revisará em até 7 dias úteis e você receberá feedback detalhado por e-mail e pelo painel de acompanhamento.</div>
+      <button class="fs-back" onclick="goPage('track')">Ver My Abstracts</button>
+    </div>
+
+    <div id="fFormContent">
+      <button class="back-btn" onclick="goPage('landing')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="15 18 9 12 15 6"/></svg>
+        Voltar ao overview
+      </button>
+
+      <div class="fp-header">
+        <h1>Submeter Abstract</h1>
+        <p>Preencha os dados abaixo. Seu abstract será revisado por Rafael Morgado em até 7 dias úteis.</p>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="step-indicator">
+        <div class="step-item">
+          <div class="step-dot active" id="sd0">1</div>
+          <div class="step-label active" id="sl0">Introdução</div>
+        </div>
+        <div class="step-line" id="sl-0"></div>
+        <div class="step-item">
+          <div class="step-dot" id="sd1">2</div>
+          <div class="step-label" id="sl1">Submissão</div>
+        </div>
+        <div class="step-line" id="sl-1"></div>
+        <div class="step-item">
+          <div class="step-dot" id="sd2">3</div>
+          <div class="step-label" id="sl2">Revisão</div>
+        </div>
+      </div>
+
+      <!-- STEP 0: Congratulations -->
+      <div class="fstep active" id="fstep-0">
+        <div class="welcome-card">
+          <div class="welcome-header">
+            <div class="welcome-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="welcome-header-text">
+              <h2>Abstract Submission</h2>
+              <p>UTI Abstracts · MetaWriters</p>
+            </div>
+          </div>
+          <div class="welcome-body">
+            <div class="welcome-section">
+              <div class="welcome-text" style="font-size:14px;color:rgba(255,255,255,.62);line-height:1.85;">
+                <p style="margin-bottom:14px;">Hi!</p>
+                <p style="margin-bottom:14px;font-weight:600;color:#fff;font-size:15px;">Congratulations on your abstract completion</p>
+                <p style="margin-bottom:22px;">We look forward to seeing you on our next live session to discuss your ideas further.</p>
+              </div>
+            </div>
+            <div class="welcome-signature">
+              Sincerely,<br><br>
+              <strong>Rafael Morgado</strong><br>
+              MetaWriters Coordinator<br>
+              <a href="mailto:metawriters@metaanalysis.academy" style="color:var(--teal);text-decoration:none;">metawriters@metaanalysis.academy</a>
+            </div>
+          </div>
+        </div>
+        <div class="form-nav">
+          <button class="f-btn-pri" onclick="goStep(1)">
+            Continue to submission
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 1: Submissão -->
+      <div class="fstep" id="fstep-1">
+        <div class="fsec">
+          <div class="fsec-ttl">Seus dados</div>
+          <div class="frow two">
+            <div class="fg"><label>What is your name? <span class="req">*</span></label><input type="text" id="f-name" placeholder="Your full name"></div>
+            <div class="fg"><label>Your email address <span class="req">*</span></label><input type="email" id="f-email" placeholder="email@example.com"></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-ttl">Abstract</div>
+          <div class="frow">
+            <div class="fg">
+              <label>What specialty is your abstract on?</label>
+              <input type="text" id="f-specialty" placeholder="e.g. Cardiology, Oncology, Nephrology...">
+            </div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>What is the title of your abstract? <span class="req">*</span></label><input type="text" id="f-title" placeholder="Full title of your work"></div>
+          </div>
+          <div class="frow">
+            <div class="fg"><label>Do you have a conference that you want to submit this abstract? If so, please tell us the conference below</label><input type="text" id="f-conference" placeholder="e.g. ESICM 2026, SCCM 2026..."></div>
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-ttl">Arquivo</div>
+          <div class="upl-zone" id="uplZone">
+            <input type="file" accept=".docx,.doc" onchange="handleFileUpload(this,'uplZone')">
+            <div class="upl-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#050810" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="upl-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="upl-lbl">Please upload the file for correction in word format <span class="req">*</span></div>
+            <div class="upl-hint">DOCX · Word format</div>
+            <div class="upl-filename" id="uplFilename"></div>
+          </div>
+        </div>
+
+        <div class="form-nav">
+          <button class="f-btn-sec" onclick="goStep(0)">Anterior</button>
+          <button class="f-btn-pri" onclick="goStep(2)">
+            Próximo: Revisão
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Revisão / Termos -->
+      <div class="fstep" id="fstep-2">
+        <div class="fsec">
+          <div class="fsec-ttl">Revisar dados</div>
+          <div id="reviewSummary" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;font-size:13px;color:rgba(255,255,255,.5);line-height:1.8;">
+            <p style="color:rgba(255,255,255,.7);font-weight:500;margin-bottom:8px;">Resumo da submissão</p>
+            Verifique todos os dados antes de enviar. Se precisar corrigir algo, use o botão "Anterior" para voltar.<br><br>
+            <span style="color:rgba(0,195,215,.7);">✓</span> Dados pessoais preenchidos<br>
+            <span style="color:rgba(0,195,215,.7);">✓</span> Abstract informado<br>
+            <span style="color:rgba(0,195,215,.7);">✓</span> Arquivo anexado
+          </div>
+        </div>
+
+        <div class="fsec">
+          <div class="fsec-ttl">Termos de uso</div>
+          <div class="waiver-box">
+            Ao submeter este abstract, você autoriza a UTI Abstracts (MetaHub) a analisar e sugerir melhorias no texto, mantendo a autoria e confidencialidade do conteúdo. O abstract revisado é de uso exclusivo do autor e não será compartilhado com terceiros.
+          </div>
+          <label class="waiver-ck">
+            <input type="checkbox" id="waiverCk" onchange="document.getElementById('submitBtn').disabled=!this.checked">
+            <span>Li e concordo com os termos de uso do serviço UTI Abstracts</span>
+          </label>
+        </div>
+
+        <div class="form-nav">
+          <button class="f-btn-sec" onclick="goStep(1)">Anterior</button>
+          <button class="f-btn-pri" id="submitBtn" disabled onclick="submitForm()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Enviar abstract
+          </button>
+        </div>
+      </div>
+    </div><!-- /fFormContent -->
+  </div><!-- /fp-body -->
+</div><!-- /page-form -->
+
+<!-- ══════════════════════════════════════════
+     PAGE 2 — MY ABSTRACTS
+══════════════════════════════════════════ -->
+<div class="page" id="page-track">
+  <div class="tp-body">
+
+    <div class="tp-header">
+      <div>
+        <div class="tp-title">My Abstracts</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.3);margin-top:4px;">Acompanhe seus abstracts em revisão</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="tp-count">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          2 abstracts
+        </span>
+        <button class="tp-add-btn" onclick="goPage('form')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Novo abstract
+        </button>
+      </div>
+    </div>
+
+    <div class="papers-stack">
+
+      <!-- Card 1: Em revisão -->
+      <div class="p-card" id="pcard-1">
+        <div class="p-card-header" onclick="toggleCard('pcard-1')">
+          <div class="p-status-pip" style="background:#f5c542;box-shadow:0 0 6px rgba(245,197,66,.5);"></div>
+          <div class="p-hdr-main">
+            <div class="p-hdr-title">Impacto da ventilação protetora em pacientes com SARA moderada-grave em UTI geral</div>
+            <div class="p-hdr-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Submetido em 23/05/2026
+              </span>
+              <span>AMIB 2026</span>
+            </div>
+          </div>
+          <div class="p-hdr-right">
+            <span class="p-badge b-aguardando">Aguardando correção</span>
+            <svg class="p-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="p-card-body">
+          <!-- Journey -->
+          <div class="journey-section">
+            <div class="journey-label">Jornada do Abstract</div>
+            <div class="journey-track">
+              <div class="jstep">
+                <div class="jstep-node done">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div class="jstep-lbl done">Enviado</div>
+              </div>
+              <div class="jstep-connector"><div class="jstep-fill full"></div></div>
+              <div class="jstep">
+                <div class="jstep-node active">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="jstep-lbl active">Aguardando ICU</div>
+              </div>
+              <div class="jstep-connector"><div class="jstep-fill none"></div></div>
+              <div class="jstep">
+                <div class="jstep-node locked">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="jstep-lbl locked">Correção recebida</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviewer -->
+          <div class="reviewer-row" style="margin-top:12px;">
+            <div class="rev-photo">
+              <img src="team/Rafael M.jpeg" alt="Rafael">
+            </div>
+            <div>
+              <div class="rev-name">Rafael Morgado</div>
+              <div class="rev-role">Coordenador · UTI dos Abstracts</div>
+            </div>
+            <a class="rev-wa" href="mailto:metawriters@metaanalysis.academy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contato
+            </a>
+          </div>
+
+        </div>
+      </div><!-- /card-1 -->
+
+      <!-- Card 2: Feedback recebido -->
+      <div class="p-card" id="pcard-2">
+        <div class="p-card-header" onclick="toggleCard('pcard-2')">
+          <div class="p-status-pip" style="background:#9a94f5;box-shadow:0 0 6px rgba(154,148,245,.5);"></div>
+          <div class="p-hdr-main">
+            <div class="p-hdr-title">Mortalidade associada ao uso de vasopressores em choque séptico: análise retrospectiva de 5 anos</div>
+            <div class="p-hdr-meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Submetido em 10/04/2026
+              </span>
+              <span>ESICM Lives 2026</span>
+            </div>
+          </div>
+          <div class="p-hdr-right">
+            <span class="p-badge b-corrigido">Corrigido</span>
+            <svg class="p-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </div>
+        <div class="p-card-body">
+          <!-- Journey -->
+          <div class="journey-section">
+            <div class="journey-label">Jornada do Abstract</div>
+            <div class="journey-track">
+              <div class="jstep">
+                <div class="jstep-node done">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                </div>
+                <div class="jstep-lbl done">Enviado</div>
+              </div>
+              <div class="jstep-connector"><div class="jstep-fill full"></div></div>
+              <div class="jstep">
+                <div class="jstep-node done">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </div>
+                <div class="jstep-lbl done">Aguardando ICU</div>
+              </div>
+              <div class="jstep-connector"><div class="jstep-fill full"></div></div>
+              <div class="jstep">
+                <div class="jstep-node active">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <div class="jstep-lbl active">Correção recebida</div>
+              </div>
+            </div>
+          </div>
+
+
+
+          <!-- Files -->
+          <div class="sec-mini-label" style="margin-top:14px;">Arquivos</div>
+          <div class="files-grid">
+            <div class="file-row">
+              <div class="file-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <span class="file-name">Abstract_vasopressores_revisado_Rafael.docx</span>
+              <span class="file-size">142 KB</span>
+            </div>
+            <div class="file-row">
+              <div class="file-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <span class="file-name">Comentarios_detalhados_Rafael.pdf</span>
+              <span class="file-size">88 KB</span>
+            </div>
+          </div>
+
+          <!-- Reviewer -->
+          <div class="reviewer-row" style="margin-top:12px;">
+            <div class="rev-photo">
+              <img src="team/Rafael M.jpeg" alt="Rafael">
+            </div>
+            <div>
+              <div class="rev-name">Rafael Morgado</div>
+              <div class="rev-role">Coordenador · UTI dos Abstracts</div>
+            </div>
+            <a class="rev-wa" href="mailto:metawriters@metaanalysis.academy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contato
+            </a>
+          </div>
+
+        </div>
+      </div><!-- /card-2 -->
+
+    </div><!-- /papers-stack -->
+  </div><!-- /tp-body -->
+</div><!-- /page-track -->
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" style="display:none;position:fixed;inset:0;z-index:800;background:rgba(4,6,14,.88);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)closeVideoModal()">
+  <div style="width:100%;max-width:680px;border-radius:18px;overflow:hidden;background:#040810;border:1px solid rgba(0,195,215,.15);box-shadow:0 40px 80px rgba(0,0,0,.7);">
+    <div style="position:relative;aspect-ratio:16/9;background:#040810;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(0,195,215,.1);border:1.5px solid rgba(0,195,215,.3);display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 24 24" fill="var(--teal)" width="22" height="22"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,195,215,.4);font-weight:600;">Vídeo em breve</div>
+    </div>
+    <div style="padding:22px 26px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Exo 2',sans-serif;font-size:15px;font-weight:700;color:#fff;">O que é a UTI Abstracts?</div>
+      <button onclick="closeVideoModal()" style="padding:7px 16px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUBMIT OVERLAY -->
+<div class="sub-overlay" id="subOverlay">
+  <div class="sub-overlay-card">
+    <div class="sub-spinner"></div>
+    <div class="sub-txt-wrap">
+      <div class="sub-txt-label">Enviando seu abstract...</div>
+      <div class="sub-txt">Por favor aguarde</div>
+    </div>
+    <div class="sub-progress-bar-wrap"><div class="sub-progress-bar-fill" id="subFill"></div></div>
+  </div>
+</div>
+
+<script>
+/* ── PAGE / TAB ROUTING ── */
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
+  document.getElementById('page-'+id).classList.add('show');
+  document.querySelectorAll('.nav-tab').forEach(t=>{
+    t.classList.toggle('active', t.dataset.page===id);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='form') resetForm();
+}
+
+document.querySelectorAll('.nav-tab').forEach(t=>{
+  t.addEventListener('click',()=>goPage(t.dataset.page));
+});
+
+/* ── FORM STEPS ── */
+let currentStep=0;
+const STEPS=3;
+const pcts=[10,40,72,100];
+
+function goStep(n){
+  document.getElementById('fstep-'+currentStep).classList.remove('active');
+  currentStep=n;
+  document.getElementById('fstep-'+n).classList.add('active');
+  updateStepUI();
+  document.querySelector('.fp-body').scrollTo({top:0,behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updateStepUI(){
+  document.getElementById('fpFill').style.width=pcts[currentStep]+'%';
+  for(let i=0;i<STEPS;i++){
+    const dot=document.getElementById('sd'+i);
+    const lbl=document.getElementById('sl'+i);
+    dot.className='step-dot'+(i<currentStep?' done':i===currentStep?' active':'');
+    lbl.className='step-label'+(i<currentStep?' done':i===currentStep?' active':'');
+    if(i<STEPS-1){
+      const line=document.getElementById('sl-'+i);
+      line.className='step-line'+(i<currentStep?' done':'');
+    }
+  }
+}
+
+function resetForm(){
+  currentStep=0;
+  document.querySelectorAll('.fstep').forEach(s=>s.classList.remove('active'));
+  document.getElementById('fstep-0').classList.add('active');
+  document.getElementById('fSuccess').classList.remove('show');
+  document.getElementById('fFormContent').style.display='';
+  document.getElementById('fpFill').style.width='10%';
+  updateStepUI();
+}
+
+/* ── FILE UPLOAD ── */
+function handleFileUpload(input, zoneId){
+  const zone=document.getElementById(zoneId);
+  if(input.files && input.files[0]){
+    zone.classList.add('has-file');
+    const fn=zone.querySelector('.upl-filename');
+    if(fn) fn.textContent=input.files[0].name;
+  }
+}
+
+/* ── SUBMIT ── */
+function submitForm(){
+  const overlay=document.getElementById('subOverlay');
+  const fill=document.getElementById('subFill');
+  overlay.classList.add('show');
+  let w=5;
+  const iv=setInterval(()=>{
+    w=Math.min(w+(Math.random()*12),92);
+    fill.style.width=w+'%';
+  },180);
+  setTimeout(()=>{
+    clearInterval(iv);fill.style.width='100%';
+    setTimeout(()=>{
+      overlay.classList.remove('show');
+      addSubmittedCard();
+      document.getElementById('fFormContent').style.display='none';
+      document.getElementById('fSuccess').classList.add('show');
+    },400);
+  },2600);
+}
+
+function addSubmittedCard(){
+  const title = document.getElementById('f-title').value.trim() || 'Abstract sem título';
+  const conference = document.getElementById('f-conference').value.trim();
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('pt-BR');
+  const stack = document.querySelector('.papers-stack');
+  const newId = 'pcard-new-' + Date.now();
+
+  const confHtml = conference
+    ? `<span>${conference}</span>`
+    : '';
+
+  const card = document.createElement('div');
+  card.className = 'p-card';
+  card.id = newId;
+  card.innerHTML = `
+    <div class="p-card-header" onclick="toggleCard('${newId}')">
+      <div class="p-status-pip" style="background:#f5c542;box-shadow:0 0 6px rgba(245,197,66,.5);"></div>
+      <div class="p-hdr-main">
+        <div class="p-hdr-title">${title}</div>
+        <div class="p-hdr-meta">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Submetido em ${dateStr}
+          </span>
+          ${confHtml}
+        </div>
+      </div>
+      <div class="p-hdr-right">
+        <span class="p-badge b-aguardando">Aguardando correção</span>
+        <svg class="p-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+    <div class="p-card-body">
+      <div class="journey-section">
+        <div class="journey-label">Jornada do Abstract</div>
+        <div class="journey-track">
+          <div class="jstep">
+            <div class="jstep-node done">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+            <div class="jstep-lbl done">Enviado</div>
+          </div>
+          <div class="jstep-connector"><div class="jstep-fill full"></div></div>
+          <div class="jstep">
+            <div class="jstep-node active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div class="jstep-lbl active">Aguardando ICU</div>
+          </div>
+          <div class="jstep-connector"><div class="jstep-fill none"></div></div>
+          <div class="jstep">
+            <div class="jstep-node locked">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="jstep-lbl locked">Correção recebida</div>
+          </div>
+        </div>
+      </div>
+      <div class="reviewer-row" style="margin-top:12px;">
+        <div class="rev-photo"><img src="team/Rafael M.jpeg" alt="Rafael"></div>
+        <div>
+          <div class="rev-name">Rafael Morgado</div>
+          <div class="rev-role">Coordenador · UTI dos Abstracts</div>
+        </div>
+        <a class="rev-wa" href="mailto:metawriters@metaanalysis.academy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Contato
+        </a>
+      </div>
+    </div>
+  `;
+
+  stack.insertBefore(card, stack.firstChild);
+
+  // Update count badge
+  const countEl = document.querySelector('.tp-count');
+  if(countEl){
+    const current = stack.querySelectorAll('.p-card').length;
+    countEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>${current} abstract${current!==1?'s':''}`;
+  }
+}
+
+/* ── CARD TOGGLE ── */
+function toggleCard(id){
+  const card=document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+/* ── VIDEO MODAL ── */
+function openVideoModal(){
+  const m=document.getElementById('videoModal');
+  m.style.display='flex';
+  requestAnimationFrame(()=>m.style.opacity='1');
+}
+function closeVideoModal(){
+  document.getElementById('videoModal').style.display='none';
+}
+</script>
+<style id="__icuhidenav">.nav{display:none !important;}</style>
+<script id="__icuroute">(function(){function r(){var h=(location.hash||"").replace("#","");if(h==="submissions"){if(window.goPage)goPage("track");}else if(h==="about"){if(window.goPage)goPage("landing");}}window.addEventListener("hashchange",r);window.addEventListener("message",function(e){var d=e&&e.data;if(d&&d.icuView){location.hash=d.icuView;r();}});window.addEventListener("load",function(){setTimeout(r,50);});})();</script>
+</body>
+</html>
