@@ -1137,19 +1137,6 @@ body::after{
 .sentback-banner{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(153,148,245,.07);border:1px solid rgba(153,148,245,.2);border-radius:9px;font-size:12px;color:rgba(153,148,245,.9);}
 .sentback-banner svg{flex-shrink:0;color:#9a94f5;}
 .reviewer-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:9px;}
-/* ── MetaWriter personal reviewer workspace ── */
-#reviewer-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:22px;padding:16px 20px;background:linear-gradient(120deg,rgba(153,148,245,.12),rgba(153,148,245,.02));border:1px solid rgba(153,148,245,.3);border-radius:14px;}
-.rv-ban-left{display:flex;align-items:center;gap:13px;min-width:0;}
-.rv-ban-photo{width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;border:2px solid rgba(153,148,245,.5);background:rgba(153,148,245,.2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#c0bbff;font-size:17px;}
-.rv-ban-photo img{width:100%;height:100%;object-fit:cover;}
-.rv-ban-name{font-size:18px;font-weight:700;color:#fff;letter-spacing:-.01em;}
-.rv-ban-role{font-size:12.5px;color:rgba(255,255,255,.55);margin-top:2px;}
-.rv-ban-stats{display:flex;gap:22px;flex-shrink:0;}
-.rv-stat{display:flex;flex-direction:column;align-items:center;}
-.rv-stat-n{font-size:22px;font-weight:800;color:#fff;line-height:1;}
-.rv-stat-l{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:4px;letter-spacing:.02em;}
-body.reviewer-scope #mw-filters,body.reviewer-scope #mw-filters~*,body.reviewer-scope .filter-row:has(#mw-filters){display:none;}
-body.reviewer-scope .nav-admin{display:none;}
 .rev-photo{width:30px;height:30px;border-radius:50%;overflow:hidden;border:1.5px solid rgba(0,217,180,.2);flex-shrink:0;}
 .rev-photo img{width:100%;height:100%;object-fit:cover;}
 .rev-name{font-size:12px;font-weight:500;color:var(--text);}
@@ -1812,7 +1799,7 @@ body.ms-embedded #page-student .pg-hdr{padding-top:22px;}
       <svg class="login-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h8M9 4l4 4-4 4"/></svg>
     </button>
 
-    <button class="login-btn purple" onclick="loginAs('reviewer')">
+    <button class="login-btn purple" onclick="loginAs('metawriter')">
       <div class="login-icon" style="background:rgba(153,148,245,.09);border:1px solid rgba(153,148,245,.22);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9a94f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
@@ -1820,20 +1807,7 @@ body.ms-embedded #page-student .pg-hdr{padding-top:22px;}
       </div>
       <div>
         <div class="login-title">MetaWriter</div>
-        <div class="login-subtitle">Your assignments · Correct &amp; track</div>
-      </div>
-      <svg class="login-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h8M9 4l4 4-4 4"/></svg>
-    </button>
-
-    <button class="login-btn" onclick="loginAs('admin')" style="border-color:rgba(255,255,255,.12);">
-      <div class="login-icon" style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cdd6e5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/>
-        </svg>
-      </div>
-      <div>
-        <div class="login-title">Admin</div>
-        <div class="login-subtitle">All papers · Assign · Full access</div>
+        <div class="login-subtitle">Review papers · Admin · Full access</div>
       </div>
       <svg class="login-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h8M9 4l4 4-4 4"/></svg>
     </button>
@@ -2771,48 +2745,15 @@ function showPage(id){
   if(t){t.classList.add('show');window.scrollTo(0,0);}
 }
 function loginAs(role){
-  window.__mwLoggedIn=true;
   if(role==='student'){
     showPage('page-student');
-  } else if(role==='reviewer'){
-    window.REVIEWER_MODE=true;
-    window.CURRENT_REVIEWER='Luisa M.';
-    document.body.classList.add('reviewer-scope');
-    allMWFilter='Luisa M.';
-    showPage('page-all-articles');
-    renderAllArticles();
-    renderAllFilters();
-    updateReviewerBanner();
   } else if(role==='metawriter'||role==='admin'){
-    window.REVIEWER_MODE=false;
-    document.body.classList.remove('reviewer-scope');
     showPage('page-admin');
     renderAdminHome();
     renderAllArticles();
   }
 }
-function updateReviewerBanner(){
-  var pg=document.getElementById('page-all-articles');if(!pg)return;
-  var old=document.getElementById('reviewer-banner');if(old)old.remove();
-  if(!window.REVIEWER_MODE)return;
-  var name=window.CURRENT_REVIEWER||'MetaWriter';
-  var photo=(typeof MW_PHOTOS!=='undefined'&&MW_PHOTOS[name])||'';
-  var mine=PAPERS.filter(function(p){return p.mw===name;});
-  var counts={awaiting:0,revising:0,corrected:0,published:0};
-  mine.forEach(function(p){if(counts[p.status]!=null)counts[p.status]++;});
-  var wrap=pg.querySelector('.ds-wrap')||pg;
-  var b=document.createElement('div');
-  b.id='reviewer-banner';
-  b.innerHTML='<div class="rv-ban-left"><div class="rv-ban-photo">'+(photo?'<img src="'+photo+'" alt="">':name.slice(0,1))+'</div>'
-    +'<div><div class="rv-ban-name">'+name+'</div><div class="rv-ban-role">Your MetaWriter workspace — only papers assigned to you</div></div></div>'
-    +'<div class="rv-ban-stats">'
-    +'<div class="rv-stat"><span class="rv-stat-n">'+mine.length+'</span><span class="rv-stat-l">Assigned to you</span></div>'
-    +'<div class="rv-stat"><span class="rv-stat-n" style="color:#ff8080;">'+(counts.revising+counts.awaiting)+'</span><span class="rv-stat-l">In progress</span></div>'
-    +'<div class="rv-stat"><span class="rv-stat-n" style="color:#1de5b0;">'+counts.published+'</span><span class="rv-stat-l">Published</span></div>'
-    +'</div>';
-  wrap.insertBefore(b, wrap.firstChild);
-}
-function logout(){window.__mwLoggedIn=false;showPage('page-login');}
+function logout(){showPage('page-login');}
 
 // Auto-navigate via ?page= query param; hide nav when ?embedded=1
 (function(){
@@ -3407,37 +3348,6 @@ let PAPERS=[{
   correction:null,
   driveLink:null,
   draft:null
-},{
-  id:1002,
-  title:"Prophylactic Anticoagulation in COVID-19 ICU Patients: A Meta-Analysis of Randomized Trials",
-  status:'awaiting',
-  mw:'Luisa M.',
-  author:'Ana Ribeiro',
-  email:'ana.ribeiro@example.com',
-  wa:'5511999911001100',
-  submitted:'Jun 18, 2026',
-  deadline:'2026-06-25',
-  dlDays:5,
-  month:'Jun 2026',
-  correction:null,
-  driveLink:null,
-  draft:null
-},{
-  id:1003,
-  title:"High-Flow Nasal Oxygen vs Standard Oxygen in Acute Respiratory Failure: A Systematic Review",
-  status:'published',
-  mw:'Luisa M.',
-  author:'Bruno Costa',
-  email:'bruno.costa@example.com',
-  wa:'5521988882020',
-  submitted:'Mar 2, 2026',
-  deadline:'2026-03-09',
-  dlDays:0,
-  month:'Mar 2026',
-  correction:null,
-  driveLink:null,
-  draft:null,
-  pubProof:{type:'doi',value:'10.1000/jmeta.2026.0113'}
 }];
 const TRACK_PAPERS=[{
   id:1001,
@@ -4157,7 +4067,5 @@ function renderDeadlineCalendar(submittedDateStr, deadlineDateStr){
 
 renderTracking();
 </script>
-<style id="__mwhidenav">.nav{display:none !important;}</style>
-<script id="__mwroute">(function(){function r(){var h=(location.hash||"").replace("#","");if(!window.__mwLoggedIn){if(window.showPage)showPage("page-login");return;}if(h==="submissions"){if(window.showPage)showPage("page-tracking");if(window.renderTracking)renderTracking();}else if(h==="about"){if(window.showPage)showPage("page-student");}}window.addEventListener("hashchange",r);window.addEventListener("message",function(e){var d=e&&e.data;if(d&&d.mwView){location.hash=d.mwView;r();}});window.addEventListener("load",function(){setTimeout(r,50);});})();</script>
 </body>
 </html>

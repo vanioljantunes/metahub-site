@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0e17;font-family:'Outfit',sans-serif;color:#e8edf5;}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px}
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(ellipse 90% 55% at 12% 0%,{{ tint }},transparent 60%),#0a0e17;">
+  <div style="max-width:1120px;margin:0 auto;padding:clamp(22px,3.5vw,40px) clamp(16px,4vw,40px) 70px;">
+
+    <!-- header -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+      <div style="width:48px;height:48px;border-radius:13px;background:{{ iconBg }};border:1px solid {{ iconBd }};display:flex;align-items:center;justify-content:center;color:{{ accent }};flex-shrink:0;">
+        <sc-if value="{{ isCode }}" hint-placeholder-val="{{ false }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></sc-if>
+        <sc-if value="{{ isDrive }}" hint-placeholder-val="{{ true }}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></sc-if>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <h1 style="font-size:clamp(22px,3vw,29px);font-weight:800;color:#fff;letter-spacing:-.02em;">{{ title }}</h1>
+        <div style="font-size:13px;color:rgba(232,237,245,.5);">{{ subtitle }}</div>
+      </div>
+    </div>
+
+    <!-- toolbar: breadcrumb + search + view -->
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;">
+        <button onClick="{{ goRoot }}" style="background:none;border:none;color:{{ crumbRootCol }};font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;cursor:pointer;padding:4px 2px;">{{ title }}</button>
+        <sc-if value="{{ inFolder }}" hint-placeholder-val="{{ false }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,237,245,.35)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <span style="color:#fff;">{{ folderName }}</span>
+        </sc-if>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px 12px;width:min(280px,52vw);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgba(232,237,245,.45)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input value="{{ query }}" onInput="{{ onQuery }}" placeholder="{{ searchPlaceholder }}" style="flex:1;min-width:0;background:none;border:none;outline:none;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- folders row (root only) -->
+    <sc-if value="{{ showFolders }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-bottom:26px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,237,245,.4);margin-bottom:11px;">Folders</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;">
+        <sc-for list="{{ folders }}" as="f" hint-placeholder-count="4">
+          <button onClick="{{ f.open }}" style="display:flex;align-items:center;gap:12px;text-align:left;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:15px;cursor:pointer;transition:background .15s,border-color .15s;" style-hover="background:rgba(255,255,255,.06);border-color:{{ accentBd }};">
+            <span style="width:38px;height:38px;border-radius:10px;background:{{ f.tileBg }};display:flex;align-items:center;justify-content:center;color:{{ accent }};flex-shrink:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></span>
+            <span style="min-width:0;"><span style="display:block;font-size:14px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ f.name }}</span><span style="display:block;font-size:11.5px;color:rgba(232,237,245,.45);margin-top:2px;">{{ f.count }} items</span></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+
+    <!-- files -->
+    <div style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,237,245,.4);margin-bottom:11px;">{{ filesLabel }}</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <sc-for list="{{ files }}" as="d" hint-placeholder-count="6">
+        <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 15px;transition:background .15s;" style-hover="background:rgba(255,255,255,.055);">
+          <span style="width:40px;height:40px;border-radius:10px;flex-shrink:0;background:{{ d.tileBg }};display:flex;align-items:center;justify-content:center;color:{{ d.tileCol }};font-size:10px;font-weight:800;letter-spacing:.02em;">{{ d.ext }}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ d.name }}</div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:11.5px;color:rgba(232,237,245,.45);margin-top:2px;"><span>{{ d.kind }}</span><span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.25);"></span><span>{{ d.size }}</span><span style="width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.25);"></span><span>{{ d.updated }}</span></div>
+          </div>
+          <a href="{{ d.href }}" download style="display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;background:{{ dlBg }};border:1px solid {{ dlBd }};color:{{ accent }};font-size:12px;font-weight:700;text-decoration:none;flex-shrink:0;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download
+          </a>
+        </div>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:50px 20px;color:rgba(232,237,245,.4);font-size:14px;">No items match "{{ query }}".</div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  DRIVE = {
+    accent: '#378add',
+    folders: [
+      { name: 'Manuscript templates', files: [
+        { name: 'IMRaD manuscript template', ext: 'DOCX', size: '84 KB', updated: 'Jun 2026' },
+        { name: 'PRISMA 2020 checklist', ext: 'PDF', size: '210 KB', updated: 'May 2026' },
+        { name: 'Cover letter template', ext: 'DOCX', size: '32 KB', updated: 'May 2026' }
+      ]},
+      { name: 'Abstract & poster', files: [
+        { name: 'Structured abstract template', ext: 'DOCX', size: '28 KB', updated: 'Apr 2026' },
+        { name: 'Conference poster (A0)', ext: 'PPTX', size: '4.2 MB', updated: 'Apr 2026' }
+      ]},
+      { name: 'Guides & SOPs', files: [
+        { name: 'How to register on PROSPERO', ext: 'PDF', size: '1.1 MB', updated: 'Mar 2026' },
+        { name: 'Search strategy worksheet', ext: 'XLSX', size: '46 KB', updated: 'Mar 2026' }
+      ]},
+      { name: 'Slide decks', files: [
+        { name: 'Journal club slide deck', ext: 'PPTX', size: '3.4 MB', updated: 'Feb 2026' }
+      ]}
+    ],
+    root: [
+      { name: 'MetaHub member handbook', ext: 'PDF', size: '2.6 MB', updated: 'Jun 2026' },
+      { name: 'Authorship agreement form', ext: 'DOCX', size: '38 KB', updated: 'May 2026' }
+    ]
+  };
+  CODE = {
+    accent: '#00d9b4',
+    folders: [
+      { name: 'R — meta-analysis', files: [
+        { name: 'binary_outcomes_forest.R', ext: 'R', size: '6 KB', updated: 'Jun 2026' },
+        { name: 'continuous_outcomes.R', ext: 'R', size: '5 KB', updated: 'Jun 2026' },
+        { name: 'subgroup_metaregression.R', ext: 'R', size: '9 KB', updated: 'May 2026' }
+      ]},
+      { name: 'R — risk of bias', files: [
+        { name: 'robvis_traffic_light.R', ext: 'R', size: '4 KB', updated: 'May 2026' }
+      ]},
+      { name: 'Datasets', files: [
+        { name: 'example_rct_dataset.csv', ext: 'CSV', size: '128 KB', updated: 'Apr 2026' },
+        { name: 'sepsis_metaanalysis.xlsx', ext: 'XLSX', size: '92 KB', updated: 'Apr 2026' },
+        { name: 'extraction_sheet_template.csv', ext: 'CSV', size: '12 KB', updated: 'Mar 2026' }
+      ]},
+      { name: 'Notebooks', files: [
+        { name: 'network_meta_analysis.Rmd', ext: 'RMD', size: '15 KB', updated: 'Mar 2026' }
+      ]}
+    ],
+    root: [
+      { name: 'setup_environment.R', ext: 'R', size: '3 KB', updated: 'Jun 2026' },
+      { name: 'README_datasets.md', ext: 'MD', size: '2 KB', updated: 'May 2026' }
+    ]
+  };
+  state = { mode: 'drive', folderIdx: -1, query: '' };
+  componentDidMount(){
+    try {
+      var q = new URLSearchParams(location.search || '');
+      var m = q.get('mode') || (location.hash || '').replace('#','');
+      if(m === 'code' || m === 'drive') this.setState({ mode: m });
+    } catch(e){}
+  }
+  extColor(ext){
+    var m = { PDF:['rgba(255,90,90,.14)','#ff8f8f'], DOCX:['rgba(55,138,221,.16)','#7db8ff'], PPTX:['rgba(245,120,60,.16)','#ffab7a'],
+      XLSX:['rgba(0,217,180,.14)','#3ee9c6'], CSV:['rgba(0,217,180,.14)','#3ee9c6'], R:['rgba(120,160,255,.16)','#a5c4ff'],
+      RMD:['rgba(154,148,245,.16)','#c0bbff'], MD:['rgba(255,255,255,.08)','#cdd6e5'] };
+    return m[ext] || ['rgba(255,255,255,.08)','#cdd6e5'];
+  }
+  renderVals(){
+    var self = this, s = this.state;
+    var isCode = s.mode === 'code';
+    var data = isCode ? this.CODE : this.DRIVE;
+    var accent = data.accent;
+    var hexA = function(hex,a){ var h=hex.replace('#',''); return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; };
+    var inFolder = s.folderIdx >= 0;
+    var q = s.query.trim().toLowerCase();
+
+    // build file list for current view
+    var rawFiles;
+    if(inFolder){ rawFiles = data.folders[s.folderIdx].files.slice(); }
+    else { rawFiles = data.root.slice(); }
+    // search: when querying, search across everything
+    if(q){
+      rawFiles = [];
+      data.root.forEach(function(f){ rawFiles.push(f); });
+      data.folders.forEach(function(fo){ fo.files.forEach(function(f){ rawFiles.push(f); }); });
+      rawFiles = rawFiles.filter(function(f){ return f.name.toLowerCase().indexOf(q) >= 0; });
+    }
+    var files = rawFiles.map(function(f){
+      var c = self.extColor(f.ext);
+      return { name: f.name, ext: f.ext, size: f.size, updated: f.updated,
+        kind: (isCode ? (f.ext === 'CSV' || f.ext === 'XLSX' ? 'Dataset' : f.ext + ' file') : f.ext + ' document'),
+        tileBg: c[0], tileCol: c[1], href: 'javascript:void(0)' };
+    });
+    var folders = data.folders.map(function(fo, i){
+      return { name: fo.name, count: fo.files.length, tileBg: hexA(accent,.13),
+        open: function(){ self.setState({ folderIdx: i, query: '' }); } };
+    });
+
+    return {
+      isCode: isCode, isDrive: !isCode, accent: accent,
+      tint: hexA(accent, .08), iconBg: hexA(accent,.12), iconBd: hexA(accent,.3),
+      accentBd: hexA(accent,.34), dlBg: hexA(accent,.1), dlBd: hexA(accent,.3),
+      title: isCode ? 'Code Library' : 'Drive',
+      subtitle: isCode ? 'Scripts, notebooks and datasets — download and run.' : 'Documents, templates and guides for your research.',
+      searchPlaceholder: isCode ? 'Search code & datasets…' : 'Search documents & templates…',
+      query: s.query, onQuery: function(e){ self.setState({ query: e.target.value }); },
+      inFolder: inFolder && !q, folderName: inFolder ? data.folders[s.folderIdx].name : '',
+      goRoot: function(){ self.setState({ folderIdx: -1, query: '' }); },
+      crumbRootCol: (inFolder && !q) ? hexA(accent,.9) : '#fff',
+      showFolders: !inFolder && !q, folders: folders,
+      filesLabel: q ? 'Search results' : (inFolder ? 'Files' : 'Recent files'),
+      files: files, empty: q && files.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

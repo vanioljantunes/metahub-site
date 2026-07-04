@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0e17;font-family:'Outfit',sans-serif;color:#e8edf5;}
+@keyframes icuPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,90,90,.5)}50%{box-shadow:0 0 0 7px rgba(255,90,90,0)}}
+@keyframes icuFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px}
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(ellipse 90% 60% at 12% 0%,rgba(0,217,180,.09),transparent 60%),radial-gradient(ellipse 80% 60% at 95% 100%,rgba(255,90,90,.05),transparent 62%),#0a0e17;">
+
+  <!-- top bar -->
+  <div style="position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:60px;padding:0 clamp(16px,4vw,40px);background:rgba(10,14,23,.86);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;align-items:center;gap:9px;font-family:'Spectral',serif;font-size:19px;font-weight:700;color:#fff;letter-spacing:-.01em;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#00d9b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><rect x="8" y="2" width="8" height="4" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
+      ICU Abstracts
+    </div>
+    <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+      <button onClick="{{ goAbout }}" style="padding:8px 14px;border-radius:9px;background:{{ aboutBtnBg }};border:1px solid rgba(255,255,255,.1);color:#cdd6e5;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;">About</button>
+      <button onClick="{{ goSubs }}" style="padding:8px 14px;border-radius:9px;background:{{ subsBtnBg }};border:1px solid rgba(0,217,180,.3);color:#00d9b4;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;">My submissions</button>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1180px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px) 60px;">
+    <div style="display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,4vw,52px);align-items:center;">
+      <div style="position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.09);background:linear-gradient(135deg,#0e1626,#0a1420);box-shadow:0 30px 70px rgba(0,0,0,.5);">
+        <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:26px 26px;"></div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(0,217,180,.16);border:1.5px solid rgba(0,217,180,.45);display:flex;align-items:center;justify-content:center;animation:icuFloat 5s ease-in-out infinite;">
+            <svg viewBox="0 0 24 24" fill="#00d9b4" style="width:24px;height:24px;margin-left:3px;"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+          </div>
+          <div style="font-size:12.5px;font-weight:600;color:rgba(232,237,245,.6);letter-spacing:.04em;">How live abstract correction works · coming soon</div>
+        </div>
+      </div>
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#ff6b6b;margin-bottom:14px;"><span style="width:8px;height:8px;border-radius:50%;background:#ff5a5a;animation:icuPulse 1.8s ease-in-out infinite;"></span>Live correction service</div>
+        <h1 style="font-family:'Spectral',serif;font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.08;letter-spacing:-.02em;color:#fff;margin-bottom:16px;">Your abstract, corrected live with Morgado.</h1>
+        <p style="font-size:15px;line-height:1.65;color:rgba(232,237,245,.66);margin-bottom:26px;max-width:450px;">Submit your abstract for critical-care venues. It goes directly to Dr. Morgado, who corrects it <strong style="color:#e8edf5;">live</strong> in a scheduled session — you watch, ask questions and leave with a submission-ready abstract.</p>
+        <button onClick="{{ goSubs }}" style="display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:12px;background:linear-gradient(135deg,#00d9b4,#2ee9c6);border:none;color:#04231d;font-family:'Outfit',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 10px 30px rgba(0,217,180,.32);">
+          Submit an abstract
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+    <!-- how it works -->
+    <div style="margin-top:clamp(36px,6vw,64px);">
+      <h2 style="font-family:'Spectral',serif;font-size:22px;font-weight:600;color:#fff;text-align:center;margin-bottom:26px;">How it works</h2>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px;"><div style="width:34px;height:34px;border-radius:9px;background:rgba(0,217,180,.13);border:1px solid rgba(0,217,180,.3);display:flex;align-items:center;justify-content:center;color:#00d9b4;font-family:'Spectral',serif;font-weight:700;margin-bottom:12px;">1</div><div style="font-weight:600;color:#fff;margin-bottom:5px;font-size:14px;">Submit your abstract</div><div style="font-size:12.5px;color:rgba(232,237,245,.55);line-height:1.5;">Upload your abstract — it goes straight to Dr. Morgado.</div></div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,90,90,.22);border-radius:14px;padding:22px;"><div style="width:34px;height:34px;border-radius:9px;background:rgba(255,90,90,.14);border:1px solid rgba(255,90,90,.35);display:flex;align-items:center;justify-content:center;color:#ff8080;font-family:'Spectral',serif;font-weight:700;margin-bottom:12px;">2</div><div style="font-weight:600;color:#fff;margin-bottom:5px;font-size:14px;">Live correction session</div><div style="font-size:12.5px;color:rgba(232,237,245,.55);line-height:1.5;">You get a scheduled date — Morgado corrects it live while you watch.</div></div>
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:22px;"><div style="width:34px;height:34px;border-radius:9px;background:rgba(0,217,180,.13);border:1px solid rgba(0,217,180,.3);display:flex;align-items:center;justify-content:center;color:#00d9b4;font-family:'Spectral',serif;font-weight:700;margin-bottom:12px;">3</div><div style="font-weight:600;color:#fff;margin-bottom:5px;font-size:14px;">Grow it into a manuscript</div><div style="font-size:12.5px;color:rgba(232,237,245,.55);line-height:1.5;">Ready for more? Send it to MetaWriters and follow the guided path.</div></div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ SUBMISSIONS ============ -->
+  <sc-if value="{{ isSubs }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1120px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 70px;">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+      <div>
+        <h1 style="font-family:'Spectral',serif;font-size:30px;font-weight:700;color:#fff;letter-spacing:-.01em;">My submissions</h1>
+        <p style="font-size:13.5px;color:rgba(232,237,245,.55);margin-top:4px;">Submit abstracts and track your live correction sessions.</p>
+      </div>
+      <a href="https://wa.me/5599999999999" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:10px;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.34);color:#3ddc7e;font-size:12.5px;font-weight:700;text-decoration:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"></path></svg>
+        Contact Morgado
+      </a>
+    </div>
+
+    <!-- new submission -->
+    <div style="background:linear-gradient(160deg,rgba(0,217,180,.06),transparent),rgba(255,255,255,.03);border:1px solid rgba(0,217,180,.2);border-radius:16px;padding:22px;margin-bottom:22px;">
+      <div style="font-family:'Spectral',serif;font-size:17px;font-weight:600;color:#fff;margin-bottom:16px;">New abstract</div>
+      <div style="margin-bottom:14px;"><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Title</label><input value="{{ title }}" onInput="{{ onTitle }}" placeholder="e.g. Vasopressors in septic shock — abstract" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+      <label style="display:block;cursor:pointer;">
+        <div style="border:1.5px dashed rgba(0,217,180,.35);border-radius:12px;padding:22px;text-align:center;background:rgba(0,217,180,.03);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#00d9b4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px;margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          <div style="font-size:13px;font-weight:600;color:#e8edf5;">{{ fileLabel }}</div>
+          <div style="font-size:11.5px;color:rgba(232,237,245,.45);margin-top:3px;">Your abstract — PDF, DOCX, etc. Sent to Dr. Morgado.</div>
+        </div>
+        <input type="file" multiple onChange="{{ onFile }}" style="display:none;">
+      </label>
+      <button onClick="{{ submit }}" style="margin-top:16px;padding:12px 22px;border-radius:11px;background:linear-gradient(135deg,#00d9b4,#2ee9c6);border:none;color:#04231d;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;box-shadow:0 8px 22px rgba(0,217,180,.28);">Submit for live correction</button>
+    </div>
+
+    <!-- tabs -->
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button onClick="{{ showPending }}" style="padding:9px 16px;border-radius:10px;background:{{ pendingTabBg }};border:1px solid {{ pendingTabBd }};color:{{ pendingTabCol }};font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Scheduled · {{ pendingCount }}</button>
+      <button onClick="{{ showCorrected }}" style="padding:9px 16px;border-radius:10px;background:{{ correctedTabBg }};border:1px solid {{ correctedTabBd }};color:{{ correctedTabCol }};font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Corrected · {{ correctedCount }}</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;">
+      <sc-for list="{{ shownSubs }}" as="s" hint-placeholder-count="3">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:17px;display:flex;flex-direction:column;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px;">
+            <div style="font-weight:600;color:#fff;font-size:14px;line-height:1.3;">{{ s.title }}</div>
+            <span style="flex-shrink:0;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.03em;background:{{ s.badgeBg }};color:{{ s.badgeColor }};">{{ s.status }}</span>
+          </div>
+          <!-- LIVE date highlight -->
+          <div style="{{ s.liveWrap }}">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="width:9px;height:9px;border-radius:50%;background:{{ s.liveDot }};{{ s.liveDotAnim }}"></span>
+              <span style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:{{ s.liveLblCol }};">{{ s.liveLabel }}</span>
+            </div>
+            <div style="font-family:'Spectral',serif;font-size:17px;font-weight:700;color:#fff;margin-top:5px;">{{ s.liveDate }}</div>
+          </div>
+          <!-- reviewer: Morgado -->
+          <div style="display:flex;align-items:center;gap:9px;margin:13px 0;">
+            <span style="width:30px;height:30px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(0,217,180,.4);background-image:url(assets/team/rafael.jpeg);background-size:cover;background-position:center;"></span>
+            <div style="min-width:0;"><div style="font-size:12.5px;font-weight:600;color:#e8edf5;">Dr. Morgado</div><div style="font-size:10.5px;color:rgba(232,237,245,.4);">Live corrector</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(232,237,245,.62);margin-bottom:13px;"><span style="color:rgba(232,237,245,.4);">Files</span><span>{{ s.files }}</span></div>
+          <!-- send to metawriters -->
+          <div style="margin-top:auto;padding-top:13px;border-top:1px solid rgba(255,255,255,.07);">
+            <div style="font-size:11.5px;color:rgba(232,237,245,.5);line-height:1.45;margin-bottom:10px;">Ready to go further? Turn this abstract into a full manuscript.</div>
+            <button onClick="{{ s.toManuscript }}" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:9px;background:rgba(0,217,180,.1);border:1px solid rgba(0,217,180,.3);color:#00d9b4;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path></svg>
+              Send it to MetaWriters as a manuscript
+            </button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ ABSTRACT → MANUSCRIPT TRANSITION ============ -->
+  <sc-if value="{{ isTransition }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:840px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 70px;">
+    <button onClick="{{ backToSubs }}" style="display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 14px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(232,237,245,.7);font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back to submissions
+    </button>
+    <div style="text-align:center;margin-bottom:8px;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#00d9b4;">Guided path</div>
+    <h1 style="font-family:'Spectral',serif;font-size:clamp(24px,3.4vw,34px);font-weight:700;color:#fff;text-align:center;letter-spacing:-.01em;margin-bottom:8px;">From abstract to manuscript</h1>
+    <p style="text-align:center;font-size:14px;color:rgba(232,237,245,.6);line-height:1.6;max-width:560px;margin:0 auto 34px;">Turning "<span style="color:#e8edf5;">{{ transTitle }}</span>" into a full paper, one step at a time. Each step has a short video from the corresponding MetaRank class.</p>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <sc-for list="{{ steps }}" as="st" hint-placeholder-count="5">
+        <div style="display:flex;gap:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:20px;">
+          <div style="flex-shrink:0;width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#00d9b4,#0a8f77);display:flex;align-items:center;justify-content:center;font-family:'Spectral',serif;font-size:17px;font-weight:700;color:#04231d;">{{ st.n }}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:6px;">
+              <h3 style="font-family:'Spectral',serif;font-size:17px;font-weight:600;color:#fff;">{{ st.title }}</h3>
+              <span style="font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#9a94f5;background:rgba(154,148,245,.14);border:1px solid rgba(154,148,245,.3);border-radius:999px;padding:3px 8px;">{{ st.rank }}</span>
+            </div>
+            <p style="font-size:13px;color:rgba(232,237,245,.6);line-height:1.55;margin-bottom:14px;">{{ st.desc }}</p>
+            <div data-video="{{ st.video }}" style="width:100%;max-width:520px;aspect-ratio:16/9;border-radius:12px;border:1px dashed rgba(0,217,180,.28);background:linear-gradient(135deg,#0a1322,#0d1a2e);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+              <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:20px 20px;"></div>
+              <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:10px;color:rgba(255,255,255,.55);">
+                <span style="width:48px;height:48px;border-radius:50%;background:rgba(0,217,180,.14);border:1.5px solid rgba(0,217,180,.42);display:flex;align-items:center;justify-content:center;"><svg viewBox="0 0 24 24" fill="#00d9b4" style="width:17px;height:17px;margin-left:3px;"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></span>
+                <span style="font-size:11px;font-weight:600;">{{ st.rank }} video · coming soon</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-top:26px;text-align:center;">
+      <a href="MetaWriters.dc.html?embnav=0#submissions" style="display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:12px;background:linear-gradient(135deg,#00d9b4,#2ee9c6);color:#04231d;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 10px 30px rgba(0,217,180,.3);">
+        Submit it to MetaWriters
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: 'about', subView: 'pending', title: '', pickedFiles: [], transTitle: '', showNav: true,
+    subs: [
+      { id: 1, title: 'Vasopressors in septic shock — abstract', status: 'Scheduled', live: 'Jul 4, 2026 · 18:00', files: 'abstract.pdf', corrected: false },
+      { id: 2, title: 'ICU delirium screening — abstract', status: 'Corrected', live: 'Jun 20, 2026 · 18:00', files: 'delirium.docx', corrected: true },
+      { id: 3, title: 'High-flow oxygen meta-analysis — abstract', status: 'Scheduled', live: 'Jul 11, 2026 · 18:00', files: 'hfnc.pdf', corrected: false },
+      { id: 4, title: 'Early mobilization in the ICU — abstract', status: 'Corrected', live: 'Jun 6, 2026 · 18:00', files: 'mobility.pdf', corrected: true }
+    ]
+  };
+  STEPS = [
+    { n: 1, title: 'Expand the introduction', rank: 'MetaRank 1', video: 'abs2ms-1.mp4', desc: 'Grow your abstract\u2019s opening into full background and a clear rationale — the gap your study fills.' },
+    { n: 2, title: 'Detail the methods', rank: 'MetaRank 2', video: 'abs2ms-2.mp4', desc: 'Write the complete methodology: eligibility, search strategy, data extraction and your statistical plan.' },
+    { n: 3, title: 'Build the results', rank: 'MetaRank 2', video: 'abs2ms-3.mp4', desc: 'Turn summary numbers into full tables, figures and forest plots with proper reporting.' },
+    { n: 4, title: 'Write a real discussion', rank: 'MetaRank 3', video: 'abs2ms-4.mp4', desc: 'Interpret your findings, compare with the literature and state limitations — not just repeat results.' },
+    { n: 5, title: 'Finalize & format', rank: 'MetaRank 1', video: 'abs2ms-5.mp4', desc: 'Assemble references, format for the target journal and prepare the submission package.' }
+  ];
+  badge(st){
+    var m = { 'Submitted': ['rgba(120,140,170,.18)', '#aab8cf'], 'Scheduled': ['rgba(255,90,90,.16)', '#ff8080'], 'Corrected': ['rgba(0,217,180,.18)', '#3ee9c6'] };
+    return m[st] || m['Submitted'];
+  }
+  componentDidMount(){
+    var self = this;
+    function applyLoc(){
+      try {
+        var h = (location.hash || '').replace('#','');
+        var q = new URLSearchParams(location.search || '');
+        var st = {};
+        if(h === 'submissions') st.view = 'subs';
+        else if(h === 'about') st.view = 'about';
+        if(q.get('embnav') === '0') st.showNav = false;
+        if(Object.keys(st).length) self.setState(st);
+      } catch(e){}
+    }
+    applyLoc();
+    window.addEventListener('hashchange', applyLoc);
+    window.addEventListener('message', function(e){ var d = e && e.data; if(d && d.icuView){ self.setState({ view: d.icuView === 'submissions' ? 'subs' : 'about' }); try{ window.scrollTo(0,0); }catch(_){} } });
+  }
+  renderVals(){
+    var self = this, s = this.state;
+    var pending = s.subs.filter(function(x){ return !x.corrected; });
+    var corrected = s.subs.filter(function(x){ return x.corrected; });
+    var list = (s.subView === 'corrected' ? corrected : pending).map(function(x){
+      var b = self.badge(x.status);
+      var isLive = !x.corrected;
+      return {
+        title: x.title, status: x.status, files: x.files, badgeBg: b[0], badgeColor: b[1],
+        liveWrap: 'border-radius:12px;padding:11px 13px;' + (isLive
+          ? 'background:linear-gradient(135deg,rgba(255,90,90,.16),rgba(255,90,90,.05));border:1px solid rgba(255,90,90,.32);'
+          : 'background:rgba(0,217,180,.08);border:1px solid rgba(0,217,180,.24);'),
+        liveDot: isLive ? '#ff5a5a' : '#00d9b4',
+        liveDotAnim: isLive ? 'animation:icuPulse 1.8s ease-in-out infinite;' : '',
+        liveLabel: isLive ? 'Live correction' : 'Corrected live on',
+        liveLblCol: isLive ? '#ff8f8f' : '#5fe3cd',
+        liveDate: x.live,
+        toManuscript: function(){ self.setState({ view: 'transition', transTitle: x.title }); try{ window.scrollTo(0,0); }catch(e){} }
+      };
+    });
+    var fileLabel = s.pickedFiles.length ? (s.pickedFiles.length + ' file(s): ' + s.pickedFiles.join(', ')) : 'Click to upload or drop your abstract';
+    var tab = function(on){ return { bg: on ? 'rgba(0,217,180,.14)' : 'rgba(255,255,255,.04)', bd: on ? 'rgba(0,217,180,.34)' : 'rgba(255,255,255,.1)', col: on ? '#00d9b4' : 'rgba(232,237,245,.6)' }; };
+    var pt = tab(s.subView === 'pending'), ct = tab(s.subView === 'corrected');
+    return {
+      isAbout: s.view === 'about', isSubs: s.view === 'subs', isTransition: s.view === 'transition', showNav: s.showNav,
+      goAbout: function(){ self.setState({ view: 'about' }); }, goSubs: function(){ self.setState({ view: 'subs' }); window.scrollTo(0,0); },
+      backToSubs: function(){ self.setState({ view: 'subs' }); window.scrollTo(0,0); },
+      aboutBtnBg: (s.view === 'about') ? 'rgba(255,255,255,.09)' : 'transparent',
+      subsBtnBg: (s.view === 'subs' || s.view === 'transition') ? 'rgba(0,217,180,.16)' : 'rgba(0,217,180,.07)',
+      title: s.title, fileLabel: fileLabel, transTitle: s.transTitle, steps: this.STEPS,
+      onTitle: function(e){ self.setState({ title: e.target.value }); },
+      onFile: function(e){ self.setState({ pickedFiles: Array.from(e.target.files || []).map(function(f){ return f.name; }) }); },
+      submit: function(){
+        var title = s.title.trim() || 'Abstract submission';
+        var files = s.pickedFiles.length ? s.pickedFiles.join(', ') : 'abstract.pdf';
+        var d = new Date(Date.now() + 10*864e5);
+        var live = d.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) + ' \u00b7 18:00';
+        var next = [{ id: Date.now(), title: title, status: 'Scheduled', live: live, files: files, corrected: false }].concat(s.subs);
+        self.setState({ subs: next, title: '', pickedFiles: [], subView: 'pending' });
+      },
+      showPending: function(){ self.setState({ subView: 'pending' }); }, showCorrected: function(){ self.setState({ subView: 'corrected' }); },
+      pendingCount: pending.length, correctedCount: corrected.length,
+      pendingTabBg: pt.bg, pendingTabBd: pt.bd, pendingTabCol: pt.col,
+      correctedTabBg: ct.bg, correctedTabBd: ct.bd, correctedTabCol: ct.col,
+      shownSubs: list
+    };
+  }
+}
+</script>
+</body>
+</html>

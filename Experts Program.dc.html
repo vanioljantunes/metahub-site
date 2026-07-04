@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0e17;font-family:'Outfit',sans-serif;color:#e8edf5;}
+@keyframes exFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px}
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(ellipse 90% 60% at 12% 0%,rgba(154,148,245,.1),transparent 60%),radial-gradient(ellipse 80% 60% at 95% 100%,rgba(0,217,180,.06),transparent 62%),#0a0e17;">
+
+  <!-- top bar -->
+  <div style="position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:60px;padding:0 clamp(16px,4vw,40px);background:rgba(10,14,23,.86);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;align-items:center;gap:9px;font-family:'Spectral',serif;font-size:19px;font-weight:700;color:#fff;letter-spacing:-.01em;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#9a94f5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+      Experts Program
+    </div>
+    <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+      <button onClick="{{ goAbout }}" style="padding:8px 14px;border-radius:9px;background:{{ aboutBg }};border:1px solid rgba(255,255,255,.1);color:#cdd6e5;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;">About</button>
+      <button onClick="{{ goApply }}" style="padding:8px 14px;border-radius:9px;background:{{ applyBg }};border:1px solid rgba(154,148,245,.3);color:#b9b0ff;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;">Apply</button>
+      <button onClick="{{ goStatus }}" style="padding:8px 14px;border-radius:9px;background:{{ statusBg }};border:1px solid rgba(0,217,180,.3);color:#00d9b4;font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:700;cursor:pointer;">My application</button>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:840px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 70px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <div style="width:40px;height:40px;border-radius:11px;background:rgba(154,148,245,.14);border:1px solid rgba(154,148,245,.32);display:flex;align-items:center;justify-content:center;color:#b9b0ff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></div>
+      <div><h1 style="font-family:'Spectral',serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:-.01em;">Expert Application</h1><div style="font-size:12.5px;color:rgba(232,237,245,.5);">{{ usedLabel }}</div></div>
+    </div>
+
+    <!-- status banner -->
+    <div style="display:flex;gap:12px;align-items:flex-start;background:linear-gradient(120deg,rgba(245,166,35,.1),transparent),rgba(255,255,255,.03);border:1px solid rgba(245,166,35,.3);border-radius:14px;padding:16px 18px;margin:18px 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f5b94a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;flex-shrink:0;margin-top:1px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <div><div style="font-weight:700;color:#f5d08a;font-size:13.5px;margin-bottom:3px;">New applications are temporarily closed</div><div style="font-size:12.5px;color:rgba(232,237,245,.55);line-height:1.5;">We are not accepting new Expert Program submissions at this time. Previously submitted applications remain under review. Questions? <a href="mailto:expertsprogram@metaanalysis.academy" style="color:#b9b0ff;">expertsprogram@metaanalysis.academy</a></div></div>
+    </div>
+
+    <!-- card -->
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:20px;">
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <button onClick="{{ setEn }}" style="padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid {{ enBd }};background:{{ enBg }};color:{{ enCol }};font-family:'Outfit',sans-serif;">English</button>
+        <button onClick="{{ setPt }}" style="padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid {{ ptBd }};background:{{ ptBg }};color:{{ ptCol }};font-family:'Outfit',sans-serif;">Português</button>
+      </div>
+      <!-- video -->
+      <div style="position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.09);background:linear-gradient(135deg,#0e1428,#0a0f1c);margin-bottom:18px;">
+        <div style="position:absolute;inset:0;background-image:radial-gradient(circle at 30% 40%,rgba(255,255,255,.05),transparent 40%),radial-gradient(circle at 70% 60%,rgba(154,148,245,.08),transparent 45%);"></div>
+        <div style="position:absolute;top:14px;left:16px;font-family:'Spectral',serif;font-size:14px;font-weight:600;letter-spacing:.32em;color:rgba(255,255,255,.75);">AREAS OF RESEARCH</div>
+        <div style="position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px;">
+          <span style="width:38px;height:26px;border-radius:5px;background:linear-gradient(135deg,#2a3348,#1a2033);border:1px solid rgba(255,255,255,.12);"></span>
+          <span style="width:38px;height:26px;border-radius:5px;background:linear-gradient(135deg,#26304a,#161d30);border:1px solid rgba(255,255,255,.12);"></span>
+          <span style="width:38px;height:26px;border-radius:5px;background:linear-gradient(135deg,#2c2740,#181428);border:1px solid rgba(255,255,255,.12);"></span>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
+          <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;animation:exFloat 5s ease-in-out infinite;"><svg viewBox="0 0 24 24" fill="#fff" style="width:22px;height:22px;margin-left:3px;"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg></div>
+        </div>
+      </div>
+      <!-- key points -->
+      <p style="font-size:13px;color:rgba(232,237,245,.6);line-height:1.6;margin-bottom:14px;">As you prepare your applications, keep the following points in mind:</p>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="display:flex;gap:11px;"><span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#9a94f5;margin-top:7px;"></span><div style="font-size:13px;color:rgba(232,237,245,.72);line-height:1.55;"><strong style="color:#fff;">Deadline:</strong> April 5 at 11:59 PM GMT-3.</div></div>
+        <div style="display:flex;gap:11px;"><span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#9a94f5;margin-top:7px;"></span><div style="font-size:13px;color:rgba(232,237,245,.72);line-height:1.55;"><strong style="color:#fff;">Submission limits:</strong> Up to two research ideas — same specialty or different. You may reuse one CV and personal statement, but the ideas must be distinct.</div></div>
+        <div style="display:flex;gap:11px;"><span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#9a94f5;margin-top:7px;"></span><div style="font-size:13px;color:rgba(232,237,245,.72);line-height:1.55;"><strong style="color:#fff;">Language:</strong> Apply in English or Portuguese — check your chosen expert's profile and specialty first to match their language.</div></div>
+        <div style="display:flex;gap:11px;"><span style="flex-shrink:0;width:6px;height:6px;border-radius:50%;background:#9a94f5;margin-top:7px;"></span><div style="font-size:13px;color:rgba(232,237,245,.72);line-height:1.55;"><strong style="color:#fff;">Application Q&amp;A:</strong> A dedicated tutoring session on March 29 at 11:00 AM GMT-3 answers questions about the process.</div></div>
+      </div>
+      <a href="#" style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:10px 16px;border-radius:10px;background:rgba(154,148,245,.1);border:1px solid rgba(154,148,245,.3);color:#b9b0ff;font-size:12.5px;font-weight:600;text-decoration:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Experts Presentation-2026.pdf</a>
+    </div>
+
+    <!-- how mentorship works -->
+    <h2 style="font-family:'Spectral',serif;font-size:19px;font-weight:600;color:#fff;margin:32px 0 16px;">What you get</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;"><div style="width:32px;height:32px;border-radius:9px;background:rgba(154,148,245,.13);border:1px solid rgba(154,148,245,.3);display:flex;align-items:center;justify-content:center;color:#b9b0ff;margin-bottom:11px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg></div><div style="font-weight:600;color:#fff;font-size:13.5px;margin-bottom:4px;">A senior on your paper</div><div style="font-size:12px;color:rgba(232,237,245,.55);line-height:1.5;">A specialist mentors you as a senior author through your project.</div></div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;"><div style="width:32px;height:32px;border-radius:9px;background:rgba(0,217,180,.13);border:1px solid rgba(0,217,180,.3);display:flex;align-items:center;justify-content:center;color:#00d9b4;margin-bottom:11px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"></path></svg></div><div style="font-weight:600;color:#fff;font-size:13.5px;margin-bottom:4px;">Selected cohort</div><div style="font-size:12px;color:rgba(232,237,245,.55);line-height:1.5;">A small, curated group works alongside the same mentor.</div></div>
+      <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:18px;"><div style="width:32px;height:32px;border-radius:9px;background:rgba(245,166,35,.13);border:1px solid rgba(245,166,35,.3);display:flex;align-items:center;justify-content:center;color:#f5b94a;margin-bottom:11px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><div style="font-weight:600;color:#fff;font-size:13.5px;margin-bottom:4px;">Real publications</div><div style="font-size:12px;color:rgba(232,237,245,.55);line-height:1.5;">Work on real projects aimed at publication, start to finish.</div></div>
+    </div>
+    <button onClick="{{ goApply }}" style="margin-top:24px;width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#9a94f5,#7b74e8);border:none;color:#0a0a1a;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 28px rgba(154,148,245,.3);">Start an application</button>
+  </div>
+  </sc-if>
+
+  <!-- ============ APPLY ============ -->
+  <sc-if value="{{ isApply }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:720px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 70px;">
+    <h1 style="font-family:'Spectral',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:4px;">New application</h1>
+    <p style="font-size:13px;color:rgba(232,237,245,.55);margin-bottom:8px;">{{ usedLabel }} — up to two research ideas.</p>
+    <div style="height:6px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:22px;"><div style="height:100%;width:{{ usedPct }};background:linear-gradient(90deg,#9a94f5,#7b74e8);border-radius:4px;"></div></div>
+
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:15px;">
+      <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Research idea title</label><input value="{{ fTitle }}" onInput="{{ onFTitle }}" placeholder="e.g. Prophylactic anticoagulation in COVID-19 ICU patients" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Specialty</label><select onChange="{{ onFSpec }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"><option>Critical Care</option><option>Cardiology</option><option>Anesthesiology</option><option>Nephrology</option><option>Infectious Disease</option><option>Other</option></select></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Language</label><select onChange="{{ onFLang }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"><option>English</option><option>Português</option></select></div>
+      </div>
+      <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Research idea (abstract)</label><textarea value="{{ fIdea }}" onInput="{{ onFIdea }}" placeholder="Describe your research question, rationale and feasibility…" style="width:100%;min-height:90px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13px;outline:none;resize:vertical;"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;">
+        <label style="cursor:pointer;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">CV (PDF)</div><div style="border:1.5px dashed rgba(154,148,245,.34);border-radius:10px;padding:14px;text-align:center;font-size:12px;color:rgba(232,237,245,.6);">{{ cvLabel }}</div><input type="file" onChange="{{ onCv }}" style="display:none;"></label>
+        <label style="cursor:pointer;"><div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Personal statement</div><div style="border:1.5px dashed rgba(154,148,245,.34);border-radius:10px;padding:14px;text-align:center;font-size:12px;color:rgba(232,237,245,.6);">{{ psLabel }}</div><input type="file" onChange="{{ onPs }}" style="display:none;"></label>
+      </div>
+      <button onClick="{{ submitApp }}" style="padding:13px;border-radius:11px;background:linear-gradient(135deg,#9a94f5,#7b74e8);border:none;color:#0a0a1a;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;">{{ applyCtaLabel }}</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ STATUS / GROUP ============ -->
+  <sc-if value="{{ isStatus }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:900px;margin:0 auto;padding:clamp(24px,4vw,44px) clamp(16px,4vw,40px) 70px;">
+    <h1 style="font-family:'Spectral',serif;font-size:26px;font-weight:700;color:#fff;margin-bottom:18px;">My application</h1>
+
+    <!-- application status list -->
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:28px;">
+      <sc-for list="{{ apps }}" as="a" hint-placeholder-count="2">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:16px 18px;">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+            <div><div style="font-weight:600;color:#fff;font-size:14px;">{{ a.title }}</div><div style="font-size:11.5px;color:rgba(232,237,245,.45);margin-top:3px;">{{ a.specialty }} · applied {{ a.date }}</div></div>
+            <span style="flex-shrink:0;padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ a.stBg }};color:{{ a.stCol }};">{{ a.status }}</span>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:6px;">
+            <sc-for list="{{ a.steps }}" as="p" hint-placeholder-count="3">
+              <div style="flex:1;height:5px;border-radius:3px;background:{{ p.bg }};"></div>
+            </sc-for>
+          </div>
+          <div style="font-size:11px;color:rgba(232,237,245,.4);margin-top:6px;">{{ a.stage }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- accepted group -->
+    <h2 style="font-family:'Spectral',serif;font-size:19px;font-weight:600;color:#fff;margin-bottom:6px;">Your group</h2>
+    <p style="font-size:12.5px;color:rgba(232,237,245,.5);margin-bottom:14px;">You were accepted into a mentored cohort. Meet your mentor and peers.</p>
+    <!-- mentor -->
+    <div style="display:flex;align-items:center;gap:14px;background:linear-gradient(120deg,rgba(154,148,245,.1),transparent),rgba(255,255,255,.03);border:1px solid rgba(154,148,245,.28);border-radius:14px;padding:16px;margin-bottom:16px;">
+      <span style="width:52px;height:52px;border-radius:50%;flex-shrink:0;border:2px solid rgba(154,148,245,.5);background-image:url(assets/team/rafael.jpeg);background-size:cover;background-position:center;"></span>
+      <div style="flex:1;min-width:0;"><div style="font-family:'Spectral',serif;font-size:16px;font-weight:700;color:#fff;">Dr. Morgado</div><div style="font-size:12px;color:#b9b0ff;">Mentor · Critical Care · acts as senior author</div></div>
+      <span style="padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:700;background:rgba(154,148,245,.16);color:#b9b0ff;">Specialist</span>
+    </div>
+    <!-- members -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;">
+      <sc-for list="{{ members }}" as="m" hint-placeholder-count="3">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:15px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:11px;">
+            <span style="width:34px;height:34px;border-radius:50%;flex-shrink:0;background:{{ m.avBg }};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;">{{ m.initials }}</span>
+            <div style="min-width:0;"><div style="font-weight:600;color:#fff;font-size:13px;">{{ m.name }}</div><div style="font-size:11px;color:rgba(232,237,245,.45);">{{ m.role }}</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px;margin-bottom:11px;">
+            <a href="{{ m.wa }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#3ddc7e;text-decoration:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"></path></svg>{{ m.phone }}</a>
+            <a href="{{ m.mailto }}" style="display:flex;align-items:center;gap:6px;color:rgba(232,237,245,.6);text-decoration:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>{{ m.email }}</a>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:6px 8px;"><div style="font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(232,237,245,.4);">Viability</div><div style="font-size:11.5px;color:{{ m.viaCol }};font-weight:600;">{{ m.viability }}</div></div>
+            <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:6px 8px;"><div style="font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(232,237,245,.4);">Attending</div><div style="font-size:11.5px;color:{{ m.attCol }};font-weight:600;">{{ m.attending }}</div></div>
+            <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:6px 8px;"><div style="font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(232,237,245,.4);">Statistics</div><div style="font-size:11.5px;color:{{ m.statCol }};font-weight:600;">{{ m.statistics }}</div></div>
+            <div style="background:rgba(255,255,255,.04);border-radius:8px;padding:6px 8px;"><div style="font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(232,237,245,.4);">Availability</div><div style="font-size:11.5px;color:{{ m.availCol }};font-weight:600;">{{ m.availability }}</div></div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: 'about', showNav: true, lang: 'en', used: 1,
+    fTitle: '', fSpec: 'Critical Care', fLang: 'English', fIdea: '', cv: '', ps: '',
+    apps: [
+      { title: 'Prophylactic anticoagulation in COVID-19 ICU', specialty: 'Critical Care', date: 'Mar 30, 2026', status: 'Under review', stage: 'Stage 2 of 3 · reviewer assigned', prog: 2 }
+    ]
+  };
+  members = [
+    { name: 'Ana Ribeiro', role: 'Resident · Critical Care', phone: '+55 11 99999-1010', email: 'ana.ribeiro@example.com', viability: 'Yes', attending: 'Yes', statistics: 'Intermediate', availability: 'Weekends' },
+    { name: 'Bruno Costa', role: 'PhD student', phone: '+55 21 98888-2020', email: 'bruno.costa@example.com', viability: 'Maybe', attending: 'Yes', statistics: 'Advanced', availability: 'Evenings' },
+    { name: 'Carla Mendes', role: 'Physician', phone: '+55 31 97777-3030', email: 'carla.mendes@example.com', viability: 'Yes', attending: 'Partly', statistics: 'Basic', availability: 'Flexible' }
+  ];
+  componentDidMount(){
+    var self = this;
+    try {
+      var q = new URLSearchParams(location.search || '');
+      var h = (location.hash || '').replace('#','');
+      var st = {};
+      if(q.get('embnav') === '0') st.showNav = false;
+      if(h === 'apply') st.view = 'apply'; else if(h === 'status') st.view = 'status';
+      if(Object.keys(st).length) this.setState(st);
+    } catch(e){}
+    window.addEventListener('message', function(ev){ var d = ev && ev.data; if(d && d.exView){ self.setState({ view: d.exView }); try{ window.scrollTo(0,0); }catch(_){} } });
+  }
+  ansColor(v){ var s = String(v).toLowerCase(); if(s === 'yes' || s === 'advanced' || s === 'flexible') return '#3ee9c6'; if(s === 'no' || s === 'basic') return '#ff9a9a'; return '#e6c266'; }
+  renderVals(){
+    var self = this, s = this.state;
+    var langBtn = function(on){ return { bg: on ? 'rgba(0,217,180,.16)' : 'rgba(255,255,255,.04)', bd: on ? 'rgba(0,217,180,.4)' : 'rgba(255,255,255,.12)', col: on ? '#00d9b4' : 'rgba(232,237,245,.6)' }; };
+    var en = langBtn(s.lang === 'en'), pt = langBtn(s.lang === 'pt');
+    var stMap = { 'Under review': ['rgba(245,166,35,.16)', '#f5b94a'], 'Accepted': ['rgba(0,217,180,.18)', '#3ee9c6'], 'Not selected': ['rgba(255,90,90,.16)', '#ff8080'] };
+    var apps = s.apps.map(function(a){
+      var b = stMap[a.status] || stMap['Under review'];
+      var steps = [1,2,3].map(function(n){ return { bg: n <= a.prog ? '#9a94f5' : 'rgba(255,255,255,.08)' }; });
+      return { title: a.title, specialty: a.specialty, date: a.date, status: a.status, stage: a.stage, stBg: b[0], stCol: b[1], steps: steps };
+    });
+    var avPal = ['linear-gradient(135deg,#00d9b4,#0a8f77)','linear-gradient(135deg,#378add,#1f5fa8)','linear-gradient(135deg,#f5a623,#c07d10)','linear-gradient(135deg,#9a94f5,#6a63d8)'];
+    var members = this.members.map(function(m, i){
+      return {
+        name: m.name, role: m.role, phone: m.phone, email: m.email,
+        wa: 'https://wa.me/' + m.phone.replace(/[^0-9]/g,''), mailto: 'mailto:' + m.email,
+        initials: m.name.split(/\s+/).map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase(),
+        avBg: avPal[i % avPal.length],
+        viability: m.viability, attending: m.attending, statistics: m.statistics, availability: m.availability,
+        viaCol: self.ansColor(m.viability), attCol: self.ansColor(m.attending), statCol: self.ansColor(m.statistics), availCol: self.ansColor(m.availability)
+      };
+    });
+    var setV = function(v){ return function(){ self.setState({ view: v }); window.scrollTo(0,0); }; };
+    return {
+      isAbout: s.view === 'about', isApply: s.view === 'apply', isStatus: s.view === 'status', showNav: s.showNav,
+      goAbout: setV('about'), goApply: setV('apply'), goStatus: setV('status'),
+      aboutBg: s.view === 'about' ? 'rgba(255,255,255,.09)' : 'transparent',
+      applyBg: s.view === 'apply' ? 'rgba(154,148,245,.16)' : 'rgba(154,148,245,.06)',
+      statusBg: s.view === 'status' ? 'rgba(0,217,180,.16)' : 'rgba(0,217,180,.06)',
+      usedLabel: s.used + '/2 applications used', usedPct: (s.used / 2 * 100) + '%',
+      setEn: function(){ self.setState({ lang: 'en' }); }, setPt: function(){ self.setState({ lang: 'pt' }); },
+      enBg: en.bg, enBd: en.bd, enCol: en.col, ptBg: pt.bg, ptBd: pt.bd, ptCol: pt.col,
+      fTitle: s.fTitle, fIdea: s.fIdea,
+      onFTitle: function(e){ self.setState({ fTitle: e.target.value }); }, onFIdea: function(e){ self.setState({ fIdea: e.target.value }); },
+      onFSpec: function(e){ self.setState({ fSpec: e.target.value }); }, onFLang: function(e){ self.setState({ fLang: e.target.value }); },
+      onCv: function(e){ self.setState({ cv: (e.target.files[0] || {}).name || '' }); }, onPs: function(e){ self.setState({ ps: (e.target.files[0] || {}).name || '' }); },
+      cvLabel: s.cv || 'Click to upload CV', psLabel: s.ps || 'Click to upload statement',
+      applyCtaLabel: s.used >= 2 ? 'Application limit reached (2/2)' : 'Submit application',
+      submitApp: function(){
+        if(s.used >= 2) return;
+        var title = s.fTitle.trim() || 'Untitled research idea';
+        var next = [{ title: title, specialty: s.fSpec, date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }), status: 'Under review', stage: 'Stage 1 of 3 · submitted', prog: 1 }].concat(s.apps);
+        self.setState({ apps: next, used: s.used + 1, view: 'status', fTitle: '', fIdea: '', cv: '', ps: '' });
+        window.scrollTo(0,0);
+      },
+      apps: apps, members: members
+    };
+  }
+}
+</script>
+</body>
+</html>

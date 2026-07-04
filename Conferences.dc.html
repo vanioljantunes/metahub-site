@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0e17;font-family:'Outfit',sans-serif;color:#e8edf5;}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:5px}
+.cf-in{animation:cfIn .4s ease both}@keyframes cfIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(ellipse 90% 55% at 12% 0%,rgba(255,122,184,.09),transparent 60%),radial-gradient(ellipse 80% 55% at 94% 100%,rgba(55,138,221,.07),transparent 62%),#0a0e17;">
+
+  <!-- top bar -->
+  <div style="position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;height:60px;padding:0 clamp(16px,4vw,40px);background:rgba(10,14,23,.86);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07);">
+    <div style="display:flex;align-items:center;gap:9px;font-family:'Spectral',serif;font-size:19px;font-weight:700;color:#fff;letter-spacing:-.01em;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#ff7ab8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;"><path d="M17 3h4v4"></path><path d="M21 3l-8 8"></path><path d="M3 7a2 2 0 0 1 2-2h5"></path><path d="M11 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6"></path></svg>
+      Conferences
+    </div>
+    <sc-if value="{{ loggedIn }}" hint-placeholder-val="{{ false }}">
+    <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+      <span style="display:flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;background:{{ roleBg }};border:1px solid {{ roleBd }};font-size:11.5px;font-weight:700;color:{{ roleCol }};">{{ roleLabel }}</span>
+      <sc-if value="{{ isStudent }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goApply }}" style="padding:8px 13px;border-radius:9px;background:{{ applyBg }};border:1px solid rgba(255,122,184,.3);color:#ff9ecb;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">Apply</button>
+        <button onClick="{{ goMine }}" style="padding:8px 13px;border-radius:9px;background:{{ mineBg }};border:1px solid rgba(55,138,221,.3);color:#7db8ff;font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;cursor:pointer;">My applications</button>
+      </sc-if>
+      <button onClick="{{ logout }}" style="padding:8px 12px;border-radius:9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);color:rgba(232,237,245,.65);font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;cursor:pointer;">Switch</button>
+    </div>
+    </sc-if>
+  </div>
+
+  <!-- ============ LOGIN ============ -->
+  <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+  <div class="cf-in" style="max-width:660px;margin:0 auto;padding:clamp(40px,8vw,90px) clamp(16px,4vw,40px);">
+    <div style="text-align:center;margin-bottom:34px;">
+      <div style="display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#ff7ab8;margin-bottom:12px;">Conference collaboration</div>
+      <h1 style="font-family:'Spectral',serif;font-size:clamp(26px,4vw,38px);font-weight:700;color:#fff;letter-spacing:-.02em;line-height:1.1;">How would you like to sign in?</h1>
+      <p style="font-size:14px;color:rgba(232,237,245,.55);margin-top:10px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.55;">Students apply to present at conferences; experts host groups and review collaborations.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <button onClick="{{ loginStudent }}" style="text-align:left;background:linear-gradient(160deg,rgba(255,122,184,.1),transparent),rgba(255,255,255,.03);border:1px solid rgba(255,122,184,.28);border-radius:18px;padding:26px 22px;cursor:pointer;transition:transform .15s,border-color .15s;" style-hover="transform:translateY(-3px);border-color:rgba(255,122,184,.55);">
+        <div style="width:46px;height:46px;border-radius:13px;background:rgba(255,122,184,.14);border:1px solid rgba(255,122,184,.34);display:flex;align-items:center;justify-content:center;color:#ff9ecb;margin-bottom:16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="width:23px;height:23px;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg></div>
+        <div style="font-family:'Spectral',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;">I'm a Student</div>
+        <div style="font-size:13px;color:rgba(232,237,245,.58);line-height:1.5;">Apply to the open conferences, track your applications and see the group you were placed in.</div>
+        <div style="display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:12.5px;font-weight:700;color:#ff9ecb;">Continue as student<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+      </button>
+      <button onClick="{{ loginExpert }}" style="text-align:left;background:linear-gradient(160deg,rgba(55,138,221,.1),transparent),rgba(255,255,255,.03);border:1px solid rgba(55,138,221,.28);border-radius:18px;padding:26px 22px;cursor:pointer;transition:transform .15s,border-color .15s;" style-hover="transform:translateY(-3px);border-color:rgba(55,138,221,.55);">
+        <div style="width:46px;height:46px;border-radius:13px;background:rgba(55,138,221,.14);border:1px solid rgba(55,138,221,.34);display:flex;align-items:center;justify-content:center;color:#7db8ff;margin-bottom:16px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="width:23px;height:23px;"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg></div>
+        <div style="font-family:'Spectral',serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;">I'm an Expert</div>
+        <div style="font-size:13px;color:rgba(232,237,245,.58);line-height:1.5;">Manage your profile and photo so student groups can reach you to present ideas and collaborate.</div>
+        <div style="display:inline-flex;align-items:center;gap:7px;margin-top:16px;font-size:12.5px;font-weight:700;color:#7db8ff;">Continue as expert<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+      </button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ STUDENT · APPLY ============ -->
+  <sc-if value="{{ isStudentApply }}" hint-placeholder-val="{{ false }}">
+  <div class="cf-in" style="max-width:1040px;margin:0 auto;padding:clamp(24px,4vw,42px) clamp(16px,4vw,40px) 70px;">
+    <h1 style="font-family:'Spectral',serif;font-size:27px;font-weight:700;color:#fff;letter-spacing:-.01em;">Open conferences</h1>
+    <p style="font-size:13.5px;color:rgba(232,237,245,.55);margin:5px 0 24px;">Three conferences are open for applications right now. Pick one to apply.</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+      <sc-for list="{{ conferences }}" as="c" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;background:rgba(255,255,255,.03);border:1px solid {{ c.bd }};border-radius:16px;overflow:hidden;">
+          <div style="height:96px;background:{{ c.art }};position:relative;display:flex;align-items:flex-end;padding:12px 15px;">
+            <span style="font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.32);border-radius:999px;padding:4px 10px;backdrop-filter:blur(3px);">{{ c.tag }}</span>
+          </div>
+          <div style="padding:16px;display:flex;flex-direction:column;flex:1;">
+            <div style="font-family:'Spectral',serif;font-size:16px;font-weight:700;color:#fff;line-height:1.25;margin-bottom:9px;">{{ c.name }}</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:rgba(232,237,245,.6);margin-bottom:14px;">
+              <div style="display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="{{ c.accent }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>Deadline {{ c.deadline }}</div>
+              <div style="display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="{{ c.accent }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>{{ c.place }}</div>
+              <div style="display:flex;align-items:center;gap:8px;"><svg viewBox="0 0 24 24" fill="none" stroke="{{ c.accent }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;flex-shrink:0;"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>{{ c.spots }}</div>
+            </div>
+            <button onClick="{{ c.apply }}" style="margin-top:auto;width:100%;padding:10px;border-radius:10px;background:{{ c.btnBg }};border:1px solid {{ c.btnBd }};color:{{ c.btnCol }};font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:700;cursor:{{ c.cursor }};">{{ c.btnLabel }}</button>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <!-- application form (when a conference is chosen) -->
+    <sc-if value="{{ formOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="cf-in" style="margin-top:26px;background:linear-gradient(160deg,rgba(255,122,184,.06),transparent),rgba(255,255,255,.03);border:1px solid rgba(255,122,184,.24);border-radius:16px;padding:22px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;">
+        <div style="font-family:'Spectral',serif;font-size:18px;font-weight:700;color:#fff;">Apply — {{ formConfName }}</div>
+        <button onClick="{{ closeForm }}" style="background:none;border:none;color:rgba(232,237,245,.5);font-size:20px;cursor:pointer;line-height:1;">×</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Abstract title</label><input value="{{ fTitle }}" onInput="{{ onFTitle }}" placeholder="Your abstract title" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Research area</label><input value="{{ fArea }}" onInput="{{ onFArea }}" placeholder="e.g. Critical care" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+      </div>
+      <div style="margin-bottom:14px;"><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Motivation</label><textarea value="{{ fMot }}" onInput="{{ onFMot }}" placeholder="Why do you want to present at this conference?" style="width:100%;min-height:80px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13px;outline:none;resize:vertical;"></textarea></div>
+      <button onClick="{{ submitApp }}" style="padding:12px 22px;border-radius:11px;background:linear-gradient(135deg,#ff7ab8,#ff5a9e);border:none;color:#2a0a1a;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;">Submit application</button>
+    </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- ============ STUDENT · MY APPLICATIONS ============ -->
+  <sc-if value="{{ isStudentMine }}" hint-placeholder-val="{{ false }}">
+  <div class="cf-in" style="max-width:940px;margin:0 auto;padding:clamp(24px,4vw,42px) clamp(16px,4vw,40px) 70px;">
+    <h1 style="font-family:'Spectral',serif;font-size:27px;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:18px;">My applications</h1>
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <sc-for list="{{ myApps }}" as="a" hint-placeholder-count="2">
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:16px;overflow:hidden;">
+          <!-- header -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:17px 19px;border-bottom:1px solid rgba(255,255,255,.06);">
+            <div style="min-width:0;">
+              <div style="font-family:'Spectral',serif;font-size:16px;font-weight:700;color:#fff;">{{ a.conf }}</div>
+              <div style="font-size:12px;color:rgba(232,237,245,.5);margin-top:3px;">"{{ a.title }}" · applied {{ a.date }}</div>
+            </div>
+            <span style="flex-shrink:0;padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ a.stBg }};color:{{ a.stCol }};">{{ a.status }}</span>
+          </div>
+          <!-- group (when accepted) -->
+          <sc-if value="{{ a.hasGroup }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:17px 19px;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(232,237,245,.4);margin-bottom:12px;">Your group · reach out to collaborate</div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px;">
+              <sc-for list="{{ a.members }}" as="m" hint-placeholder-count="2">
+                <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:13px;">
+                  <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+                    <span style="width:32px;height:32px;border-radius:50%;flex-shrink:0;background:{{ m.avBg }};display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:#fff;">{{ m.initials }}</span>
+                    <div style="min-width:0;"><div style="font-size:12.5px;font-weight:600;color:#fff;">{{ m.name }}</div><div style="font-size:10.5px;color:{{ m.roleCol }};">{{ m.role }}</div></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:4px;font-size:11px;margin-bottom:9px;">
+                    <a href="{{ m.wa }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;color:#3ddc7e;text-decoration:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"></path></svg>{{ m.phone }}</a>
+                    <a href="{{ m.mailto }}" style="display:flex;align-items:center;gap:6px;color:rgba(232,237,245,.6);text-decoration:none;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;flex-shrink:0;"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>{{ m.email }}</a>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;">
+                    <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:5px 7px;"><div style="font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(232,237,245,.4);">Viability</div><div style="font-size:11px;font-weight:600;color:{{ m.viaCol }};">{{ m.viability }}</div></div>
+                    <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:5px 7px;"><div style="font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(232,237,245,.4);">Attending</div><div style="font-size:11px;font-weight:600;color:{{ m.attCol }};">{{ m.attending }}</div></div>
+                    <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:5px 7px;"><div style="font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(232,237,245,.4);">Statistics</div><div style="font-size:11px;font-weight:600;color:{{ m.statCol }};">{{ m.statistics }}</div></div>
+                    <div style="background:rgba(255,255,255,.04);border-radius:7px;padding:5px 7px;"><div style="font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:rgba(232,237,245,.4);">Availability</div><div style="font-size:11px;font-weight:600;color:{{ m.availCol }};">{{ m.availability }}</div></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          </sc-if>
+          <sc-if value="{{ a.noGroup }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:14px 19px;font-size:12px;color:rgba(232,237,245,.45);">{{ a.pendingNote }}</div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ============ EXPERT · PROFILE ============ -->
+  <sc-if value="{{ isExpert }}" hint-placeholder-val="{{ false }}">
+  <div class="cf-in" style="max-width:760px;margin:0 auto;padding:clamp(24px,4vw,42px) clamp(16px,4vw,40px) 70px;">
+    <h1 style="font-family:'Spectral',serif;font-size:27px;font-weight:700;color:#fff;letter-spacing:-.01em;">My expert profile</h1>
+    <p style="font-size:13.5px;color:rgba(232,237,245,.55);margin:5px 0 24px;">Keep this up to date — student groups use it to reach you and present their ideas.</p>
+
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:18px;padding:24px;">
+      <!-- photo + name -->
+      <div style="display:flex;align-items:center;gap:18px;margin-bottom:22px;">
+        <label style="position:relative;cursor:pointer;flex-shrink:0;">
+          <span style="display:block;width:88px;height:88px;border-radius:50%;border:2px solid rgba(55,138,221,.5);background-image:{{ photoBg }};background-size:cover;background-position:center;background-color:rgba(55,138,221,.16);"></span>
+          <span style="position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:#378add;border:3px solid #0a0e17;display:flex;align-items:center;justify-content:center;color:#fff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></span>
+          <input type="file" accept="image/*" onChange="{{ onPhoto }}" style="display:none;">
+        </label>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Full name</div>
+          <input value="{{ pName }}" onInput="{{ onName }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:15px;font-weight:600;outline:none;">
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Specialty</label><input value="{{ pSpec }}" onInput="{{ onSpec }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Institution</label><input value="{{ pInst }}" onInput="{{ onInst }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">WhatsApp</label><input value="{{ pWa }}" onInput="{{ onWa }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+        <div><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Email</label><input value="{{ pEmail }}" onInput="{{ onEmail }}" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;"></div>
+      </div>
+      <div style="margin-bottom:18px;"><label style="display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(232,237,245,.45);margin-bottom:6px;">Bio</label><textarea value="{{ pBio }}" onInput="{{ onBio }}" style="width:100%;min-height:88px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:11px 13px;color:#e8edf5;font-family:'Outfit',sans-serif;font-size:13px;outline:none;resize:vertical;line-height:1.55;"></textarea></div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button onClick="{{ saveProfile }}" style="padding:12px 24px;border-radius:11px;background:linear-gradient(135deg,#378add,#2a6fbf);border:none;color:#fff;font-family:'Outfit',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;">{{ saveLabel }}</button>
+        <span style="font-size:12px;color:#3ee9c6;opacity:{{ savedOpacity }};transition:opacity .3s;">Saved ✓</span>
+      </div>
+    </div>
+
+    <!-- groups that can reach you -->
+    <h2 style="font-family:'Spectral',serif;font-size:18px;font-weight:600;color:#fff;margin:30px 0 5px;">Groups assigned to you</h2>
+    <p style="font-size:12.5px;color:rgba(232,237,245,.5);margin-bottom:14px;">These student groups can contact you to present their ideas and ask for collaboration.</p>
+    <div style="display:flex;flex-direction:column;gap:11px;">
+      <sc-for list="{{ expertGroups }}" as="g" hint-placeholder-count="2">
+        <div style="display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:14px 16px;">
+          <div style="width:40px;height:40px;border-radius:11px;flex-shrink:0;background:{{ g.tileBg }};display:flex;align-items:center;justify-content:center;color:{{ g.tileCol }};"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:19px;height:19px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg></div>
+          <div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:600;color:#fff;">{{ g.name }}</div><div style="font-size:11.5px;color:rgba(232,237,245,.5);margin-top:2px;">{{ g.conf }} · {{ g.count }} students</div></div>
+          <span style="padding:5px 11px;border-radius:999px;font-size:10.5px;font-weight:700;background:{{ g.stBg }};color:{{ g.stCol }};">{{ g.stage }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  CONFS = [
+    { id:'c1', name:'International Critical Care Congress 2026', tag:'Critical Care', deadline:'Aug 15, 2026', place:'Lisbon, Portugal', spots:'Abstract + poster', accent:'#ff7ab8', art:'linear-gradient(135deg,#3a0f28,#7a1f52,#3a0f28)', bd:'rgba(255,122,184,.26)' },
+    { id:'c2', name:'World Congress of Cardiology', tag:'Cardiology', deadline:'Sep 1, 2026', place:'Madrid, Spain', spots:'Oral presentation', accent:'#378add', art:'linear-gradient(135deg,#0d2440,#1f4f8a,#0d2440)', bd:'rgba(55,138,221,.26)' },
+    { id:'c3', name:'Global Meta-Research Summit', tag:'Methodology', deadline:'Sep 20, 2026', place:'Online', spots:'Abstract', accent:'#00d9b4', art:'linear-gradient(135deg,#04231d,#0a6f5c,#04231d)', bd:'rgba(0,217,180,.26)' }
+  ];
+  MEMBERS = [
+    { name:'Ana Ribeiro', role:'Resident · Critical Care', phone:'+55 11 99999-1010', email:'ana.ribeiro@example.com', viability:'Yes', attending:'Yes', statistics:'Intermediate', availability:'Weekends' },
+    { name:'Bruno Costa', role:'PhD student', phone:'+55 21 98888-2020', email:'bruno.costa@example.com', viability:'Maybe', attending:'Yes', statistics:'Advanced', availability:'Evenings' },
+    { name:'Carla Mendes', role:'Physician', phone:'+55 31 97777-3030', email:'carla.mendes@example.com', viability:'Yes', attending:'Partly', statistics:'Basic', availability:'Flexible' }
+  ];
+  state = {
+    view: 'login', role: null, applyConf: null,
+    fTitle: '', fArea: '', fMot: '',
+    myApps: [
+      { conf:'International Critical Care Congress 2026', title:'Vasopressors in septic shock', date:'Jun 20, 2026', status:'Accepted', group:true },
+      { conf:'World Congress of Cardiology', title:'AF ablation outcomes meta-analysis', date:'Jun 28, 2026', status:'Under review', group:false }
+    ],
+    profile: { name:'Dr. Morgado', spec:'Critical Care · Meta-analysis', inst:'Meta-analysis Academy', wa:'+55 11 90000-0000', email:'morgado@metaanalysis.academy', bio:'Intensivist and meta-analysis mentor. Happy to hear student groups present their conference ideas and discuss collaboration.', photo:'assets/team/rafael.jpeg' },
+    saved: false
+  };
+  ansColor(v){ var s=String(v).toLowerCase(); if(s==='yes'||s==='advanced'||s==='flexible') return '#3ee9c6'; if(s==='no'||s==='basic') return '#ff9a9a'; return '#e6c266'; }
+  componentDidMount(){
+    var self=this;
+    function applyLoc(){
+      try {
+        var q=new URLSearchParams(location.search||'');
+        var r=q.get('role');
+        var h=(location.hash||'').replace('#','');
+        var st={};
+        if(r==='student'||r==='expert'){ st.view = r==='expert'?'expert':'studentApply'; st.role=r; }
+        if(h==='submissions'){ st.view='studentMine'; st.role='student'; }
+        else if(h==='about'){ st.view='login'; st.role=null; }
+        if(Object.keys(st).length) self.setState(st);
+      } catch(e){}
+    }
+    applyLoc();
+    window.addEventListener('hashchange', applyLoc);
+    window.addEventListener('message', function(e){ var d=e&&e.data; if(d&&d.cfView){ if(d.cfView==='submissions') self.setState({ view:'studentMine', role:'student' }); else self.setState({ view:'login', role:null }); try{ window.scrollTo(0,0); }catch(_){} } });
+  }
+  renderVals(){
+    var self=this, s=this.state;
+    var hexA=function(hex,a){ var h=hex.replace('#',''); return 'rgba('+parseInt(h.slice(0,2),16)+','+parseInt(h.slice(2,4),16)+','+parseInt(h.slice(4,6),16)+','+a+')'; };
+    var avPal=['linear-gradient(135deg,#ff7ab8,#c04c86)','linear-gradient(135deg,#378add,#1f5fa8)','linear-gradient(135deg,#00d9b4,#0a8f77)','linear-gradient(135deg,#9a94f5,#6a63d8)'];
+    var initials=function(n){ return n.split(/\s+/).map(function(w){return w[0];}).join('').slice(0,2).toUpperCase(); };
+
+    // conferences
+    var conferences=this.CONFS.map(function(c){
+      var applied = s.myApps.some(function(a){ return a.conf===c.name; });
+      return { name:c.name, tag:c.tag, deadline:c.deadline, place:c.place, spots:c.spots, accent:c.accent, art:c.art, bd:c.bd,
+        btnLabel: applied?'Already applied':'Apply to this conference',
+        btnBg: applied?'rgba(255,255,255,.04)':hexA(c.accent,.14), btnBd: applied?'rgba(255,255,255,.1)':hexA(c.accent,.4),
+        btnCol: applied?'rgba(232,237,245,.45)':'#fff', cursor: applied?'default':'pointer',
+        apply: function(){ if(applied) return; self.setState({ applyConf:c }); } };
+    });
+
+    // my applications
+    var stMap={ 'Accepted':['rgba(0,217,180,.18)','#3ee9c6'], 'Under review':['rgba(245,166,35,.16)','#f5b94a'], 'Not selected':['rgba(255,90,90,.16)','#ff8080'], 'Submitted':['rgba(120,140,170,.18)','#aab8cf'] };
+    var myApps=s.myApps.map(function(a){
+      var b=stMap[a.status]||stMap['Submitted'];
+      var members=a.group?self.MEMBERS.map(function(m,i){ return {
+        name:m.name, role:m.role, initials:initials(m.name), avBg:avPal[i%avPal.length], roleCol:'#7db8ff',
+        phone:m.phone, email:m.email, wa:'https://wa.me/'+m.phone.replace(/[^0-9]/g,''), mailto:'mailto:'+m.email,
+        viability:m.viability, attending:m.attending, statistics:m.statistics, availability:m.availability,
+        viaCol:self.ansColor(m.viability), attCol:self.ansColor(m.attending), statCol:self.ansColor(m.statistics), availCol:self.ansColor(m.availability)
+      }; }):[];
+      return { conf:a.conf, title:a.title, date:a.date, status:a.status, stBg:b[0], stCol:b[1],
+        hasGroup:a.group, noGroup:!a.group, members:members,
+        pendingNote: a.status==='Under review'?'Your group will appear here once you are accepted.':'No group assigned yet.' };
+    });
+
+    // expert groups
+    var expertGroups=[
+      { name:'Group A — Septic shock', conf:'Intl. Critical Care Congress', count:3, stage:'Active', tileBg:hexA('#ff7ab8',.14), tileCol:'#ff9ecb', stBg:'rgba(0,217,180,.16)', stCol:'#3ee9c6' },
+      { name:'Group B — AF ablation', conf:'World Congress of Cardiology', count:2, stage:'Forming', tileBg:hexA('#378add',.14), tileCol:'#7db8ff', stBg:'rgba(245,166,35,.16)', stCol:'#f5b94a' }
+    ];
+
+    var p=s.profile;
+    var setV=function(v){ return function(){ self.setState({ view:v }); window.scrollTo(0,0); }; };
+
+    return {
+      loggedIn: s.view!=='login', isLogin: s.view==='login',
+      isStudent: s.role==='student', isStudentApply: s.view==='studentApply', isStudentMine: s.view==='studentMine', isExpert: s.view==='expert',
+      roleLabel: s.role==='expert'?'Expert':'Student', roleBg: s.role==='expert'?'rgba(55,138,221,.14)':'rgba(255,122,184,.14)',
+      roleBd: s.role==='expert'?'rgba(55,138,221,.32)':'rgba(255,122,184,.32)', roleCol: s.role==='expert'?'#7db8ff':'#ff9ecb',
+      loginStudent: function(){ self.setState({ view:'studentApply', role:'student' }); window.scrollTo(0,0); },
+      loginExpert: function(){ self.setState({ view:'expert', role:'expert' }); window.scrollTo(0,0); },
+      logout: function(){ self.setState({ view:'login', role:null, applyConf:null }); window.scrollTo(0,0); },
+      goApply: setV('studentApply'), goMine: setV('studentMine'),
+      applyBg: s.view==='studentApply'?'rgba(255,122,184,.16)':'rgba(255,122,184,.06)',
+      mineBg: s.view==='studentMine'?'rgba(55,138,221,.16)':'rgba(55,138,221,.06)',
+      conferences: conferences,
+      formOpen: !!s.applyConf, formConfName: s.applyConf?s.applyConf.name:'',
+      closeForm: function(){ self.setState({ applyConf:null }); },
+      fTitle:s.fTitle, fArea:s.fArea, fMot:s.fMot,
+      onFTitle:function(e){ self.setState({fTitle:e.target.value}); }, onFArea:function(e){ self.setState({fArea:e.target.value}); }, onFMot:function(e){ self.setState({fMot:e.target.value}); },
+      submitApp: function(){
+        var conf=s.applyConf; if(!conf) return;
+        var title=s.fTitle.trim()||'Untitled abstract';
+        var next=[{ conf:conf.name, title:title, date:'Jul 4, 2026', status:'Under review', group:false }].concat(s.myApps);
+        self.setState({ myApps:next, applyConf:null, fTitle:'', fArea:'', fMot:'', view:'studentMine' }); window.scrollTo(0,0);
+      },
+      myApps: myApps, expertGroups: expertGroups,
+      // profile
+      photoBg: p.photo?('url('+p.photo+')'):'none',
+      pName:p.name, pSpec:p.spec, pInst:p.inst, pWa:p.wa, pEmail:p.email, pBio:p.bio,
+      onPhoto:function(e){ var f=e.target.files&&e.target.files[0]; if(!f)return; var u=URL.createObjectURL(f); self.setState({ profile:Object.assign({},p,{photo:u}) }); },
+      onName:function(e){ self.setState({profile:Object.assign({},p,{name:e.target.value})}); },
+      onSpec:function(e){ self.setState({profile:Object.assign({},p,{spec:e.target.value})}); },
+      onInst:function(e){ self.setState({profile:Object.assign({},p,{inst:e.target.value})}); },
+      onWa:function(e){ self.setState({profile:Object.assign({},p,{wa:e.target.value})}); },
+      onEmail:function(e){ self.setState({profile:Object.assign({},p,{email:e.target.value})}); },
+      onBio:function(e){ self.setState({profile:Object.assign({},p,{bio:e.target.value})}); },
+      saveProfile:function(){ self.setState({saved:true}); setTimeout(function(){ self.setState({saved:false}); },2200); },
+      saveLabel: s.saved?'Saved':'Save profile', savedOpacity: s.saved?1:0
+    };
+  }
+}
+</script>
+</body>
+</html>
