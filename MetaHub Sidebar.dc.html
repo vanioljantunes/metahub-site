@@ -3029,6 +3029,20 @@ body::after{
 .cls-col:nth-child(1) .cls-title::before{background:var(--cyan);color:var(--cyan);}
 .cls-col:nth-child(2) .cls-title::before{background:var(--blue);color:var(--blue);}
 .cls-col:nth-child(3) .cls-title::before{background:var(--purple);color:var(--purple);}
+/* polish: classes carousel header + dots */
+.cls-head{width:auto !important;max-width:100% !important;gap:2px !important;padding:4px 5px !important;border-radius:10px !important;}
+.cls-head:hover{border-color:var(--border-h);}
+.cls-title{flex:0 1 auto !important;padding:0 6px;}
+.cls-arrow{width:24px !important;height:24px !important;border-radius:999px !important;}
+.cls-arrow:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+.cls-dots{margin:0 0 12px !important;gap:5px;}
+.cls-dot.on{box-shadow:0 0 8px currentColor;}
+.cls-col:nth-child(1) .cls-dot.on{background:var(--cyan);color:var(--cyan);}
+.cls-col:nth-child(2) .cls-dot.on{background:var(--blue);color:var(--blue);}
+.cls-col:nth-child(3) .cls-dot.on{background:var(--purple);color:var(--purple);}
+/* polish: align card titles across the three columns */
+.cls-track .trend-info .trend-views{order:3;margin-top:2px;}
+
 .cls-arrow{width:26px !important;height:26px !important;border-radius:50% !important;
   background:transparent !important;border:none !important;color:rgba(255,255,255,.55) !important;}
 .cls-arrow:hover{background:rgba(255,255,255,.08) !important;color:#fff !important;}
