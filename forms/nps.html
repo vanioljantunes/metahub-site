@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark" style="color-scheme: dark;">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pesquisa da Comunidade | MetaHub</title>
+<meta name="description" content="Formulário nativo de NPS e conexão com a comunidade, no layout da plataforma MetaHub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300..900&family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap">
+<link rel="stylesheet" href="nps.css">
+</head>
+<body>
+
+<div class="mh-sidebar-space">
+  <aside class="mh-sidebar" aria-label="Navegação principal">
+    <div class="mh-sidebar-head">
+      <a class="mh-brand" href="../index.html" aria-label="MetaHub home">Meta<span>Hub</span></a>
+    </div>
+
+    <nav class="mh-sidebar-nav" aria-label="Plataforma">
+      <a class="mh-nav-item" href="../index.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <span>Home</span>
+      </a>
+      <a class="mh-nav-item" href="../first-steps.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"/><circle cx="12" cy="12" r="10"/></svg>
+        <span>First Steps</span>
+      </a>
+      <a class="mh-nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></svg>
+        <span>Discover your Rank</span>
+      </a>
+
+      <div class="mh-nav-divider"></div>
+
+      <a class="mh-nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+        <span>Courses</span>
+      </a>
+      <a class="mh-nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+        <span>Calendar</span>
+      </a>
+      <a class="mh-nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>
+        <span>Code Library</span>
+      </a>
+
+      <div class="mh-nav-divider"></div>
+
+      <a class="mh-nav-item active" href="nps.html" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Pesquisas</span>
+      </a>
+      <a class="mh-nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+        <span>FAQ</span>
+      </a>
+    </nav>
+
+    <div class="mh-sidebar-foot">
+      <div class="mh-language" role="group" aria-label="Idioma da interface">
+        <button type="button" aria-pressed="true">PT</button>
+        <button type="button" aria-pressed="false">EN</button>
+      </div>
+      <div class="mh-profile">
+        <span class="mh-avatar" aria-hidden="true">MT</span>
+        <span>Membro MetaHub</span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<main class="mh-content">
+  <div class="mh-form-page">
+
+    <header class="mh-form-head">
+      <span class="mh-eyebrow">Pesquisa da comunidade</span>
+      <h1>Como está a sua experiência no MetaHub?</h1>
+      <p>Três perguntas, menos de um minuto. As respostas vão para a Diretoria de Comunidade e definem o que muda no próximo trimestre.</p>
+      <div class="mh-progress-rail"><div class="mh-progress-fill" id="progress-fill"></div></div>
+      <p class="mh-progress-label" id="progress-label">0 de 2 perguntas obrigatórias respondidas</p>
+    </header>
+
+    <form id="form" novalidate>
+
+      <section class="mh-card" style="--accent:#378add">
+        <div class="mh-q-head">
+          <span class="mh-q-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </span>
+          <div>
+            <h2 id="q-connection">O quanto você se sente conectado às outras pessoas do MetaHub?<span class="mh-required" aria-hidden="true">*</span></h2>
+            <p>Colegas, coordenadores, grupos de estudo, monitorias.</p>
+          </div>
+        </div>
+        <div class="mh-scale" role="group" aria-labelledby="q-connection" data-field="connection"></div>
+        <div class="mh-scale-legend"><span>0 = nada conectado</span><span>10 = totalmente parte do grupo</span></div>
+        <div class="mh-verdict" data-verdict="connection" aria-live="polite"></div>
+      </section>
+
+      <section class="mh-card" style="--accent:#00d9b4">
+        <div class="mh-q-head">
+          <span class="mh-q-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5"/></svg>
+          </span>
+          <div>
+            <h2 id="q-nps">De 0 a 10, o quanto você recomendaria o MetaHub para um colega?<span class="mh-required" aria-hidden="true">*</span></h2>
+            <p>Esta é a pergunta que vira o NPS geral da comunidade.</p>
+          </div>
+        </div>
+        <div class="mh-scale" role="group" aria-labelledby="q-nps" data-field="nps" data-nps="true"></div>
+        <div class="mh-scale-legend"><span>0 = não recomendaria</span><span>10 = recomendaria com certeza</span></div>
+        <div class="mh-verdict" data-verdict="nps" aria-live="polite"></div>
+      </section>
+
+      <section class="mh-card" style="--accent:#9a94f5">
+        <div class="mh-q-head">
+          <span class="mh-q-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg>
+          </span>
+          <div>
+            <h2><label for="comment">Algum comentário?</label></h2>
+            <p>Opcional. O que está funcionando e o que precisa mudar.</p>
+          </div>
+        </div>
+        <textarea id="comment" name="comment" placeholder="Escreva aqui..."></textarea>
+      </section>
+
+      <button type="button" class="mh-optional-cta" id="optional-toggle" aria-expanded="false" aria-controls="optional">
+        <span>
+          <strong>Quer avaliar cada coordenação também?</strong>
+          <span>Mais 3 notas, tudo opcional. Ajuda cada área a saber onde está.</span>
+        </span>
+        <span class="mh-plus" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        </span>
+      </button>
+
+      <div id="optional" hidden>
+        <p class="mh-section-label">Por coordenação</p>
+
+        <section class="mh-card" style="--accent:#f0c828">
+          <div class="mh-q-head">
+            <span class="mh-q-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </span>
+            <div>
+              <h2 id="q-metarank">De 0 a 10, o quanto você recomendaria o MetaRank para outros alunos?</h2>
+              <p class="mh-owner">Educação · <b>Vanio</b></p>
+            </div>
+          </div>
+          <div class="mh-scale" role="group" aria-labelledby="q-metarank" data-field="metarank" data-nps="true"></div>
+          <div class="mh-scale-legend"><span>0 = não recomendaria</span><span>10 = recomendaria com certeza</span></div>
+        </section>
+
+        <section class="mh-card" style="--accent:#9a94f5">
+          <div class="mh-q-head">
+            <span class="mh-q-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h6"/><path d="M9 13h6"/><path d="M9 17h3"/></svg>
+            </span>
+            <div>
+              <h2 id="q-metawriters">De 0 a 10, o quanto você recomendaria o MetaWriters?</h2>
+              <p class="mh-owner">MetaWriters · <b>Rafa</b></p>
+            </div>
+          </div>
+          <div class="mh-scale" role="group" aria-labelledby="q-metawriters" data-field="metawriters" data-nps="true"></div>
+          <div class="mh-scale-legend"><span>0 = não recomendaria</span><span>10 = recomendaria com certeza</span></div>
+        </section>
+
+        <section class="mh-card" style="--accent:#ec6b9a">
+          <div class="mh-q-head">
+            <span class="mh-q-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+            </span>
+            <div>
+              <h2 id="q-engagement">De 0 a 10, o quanto você recomendaria as atividades de engajamento?</h2>
+              <p class="mh-owner">Engajamento · <b>Douglas</b></p>
+            </div>
+          </div>
+          <div class="mh-scale" role="group" aria-labelledby="q-engagement" data-field="engagement" data-nps="true"></div>
+          <div class="mh-scale-legend"><span>0 = não recomendaria</span><span>10 = recomendaria com certeza</span></div>
+        </section>
+
+        <section class="mh-card" style="--accent:#378add">
+          <div class="mh-q-head">
+            <span class="mh-q-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </span>
+            <div>
+              <h2><label for="coord-comment">Algo para uma coordenação específica?</label></h2>
+              <p>Opcional. Diga para quem é o recado.</p>
+            </div>
+          </div>
+          <textarea id="coord-comment" name="coord-comment" placeholder="Ex.: na MetaWriters, senti falta de..."></textarea>
+        </section>
+      </div>
+
+      <div class="mh-actions">
+        <button type="submit" class="mh-submit" id="submit" disabled>Enviar resposta</button>
+        <span class="mh-hint" id="hint">Responda as duas perguntas obrigatórias para enviar.</span>
+      </div>
+    </form>
+
+    <div class="mh-done" id="done" hidden>
+      <h2>Resposta registrada</h2>
+      <p>Obrigado. A Diretoria de Comunidade lê todas as respostas e o resumo volta para o grupo.</p>
+      <details>
+        <summary>Ver o payload que o backend receberia</summary>
+        <pre id="payload"></pre>
+      </details>
+    </div>
+
+    <p class="mh-note">
+      <b>Exemplo estático.</b> Nada é enviado ou armazenado: o botão só monta o JSON acima,
+      que serve de contrato de dados para a implementação nativa na plataforma.
+    </p>
+
+  </div>
+</main>
+
+<script src="nps.js"></script>
+</body>
+</html>
