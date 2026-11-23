@@ -40,6 +40,7 @@ form when editing, and keep replacements in that same escaped form.
 |---|---|
 | `index.html` | The edit surface. Inline CSS + a small vanilla-JS block (video player, section-nav tabs, SVG title animation), inside the bundler template. |
 | `*.dc.html`, `abstracts_icu.html`, `metawriters.html`, `tutoring_session.html` | Subpages linked from `index.html`. |
+| `app/` | Static mirror of the live logged-in platform (every sidebar page, frozen DOM + live stylesheet `assets/app.css`, `assets/mirror.js` for sidebar groups and carousel). `app/metarank.html` is the Courses redesign (`assets/courses.css/js`); `metarank-original.html` is the untouched live copy. Regenerate the mirror rather than hand-editing the frozen pages. |
 | `serve.mjs` | Tiny static server on `:4321`. Needed because relative assets + the YouTube iframe require `http://`, not `file://`. |
 | `assets/` | `logo.png` (real, from live site). `hero.png`, `team/rafael.jpeg`, `team/team-photo.png` are **placeholders** — swap real files in at the same paths, no code change. |
 | `reference/live-home/` | **Read-only, gitignored.** Snapshot of the live logged-in Home (React-rendered `index.html`, `home.png`, stylesheets). Pull real content/colours/thumbnails from here. Never the edit surface, never pushed. |
