@@ -14,6 +14,23 @@
       panel.hidden = !panel.hidden; b.setAttribute('aria-expanded', String(!panel.hidden));
     });
   });
+  // sidebar: collapse button and the compact rail the app uses below 768px
+  var space = document.querySelector('.mh-sidebar-space');
+  var drawer = document.querySelector('link[href="assets/courses.css"]'); // course pages use a drawer instead
+  if (space) {
+    var narrow = matchMedia('(max-width: 767px)');
+    var user = null;
+    var apply = function () {
+      var compact = user !== null ? user : (narrow.matches && !drawer);
+      space.setAttribute('data-compact', String(compact));
+    };
+    var t = document.querySelector('.mh-sidebar-toggle');
+    t && t.addEventListener('click', function () {
+      user = space.getAttribute('data-compact') !== 'true'; apply();
+    });
+    narrow.addEventListener('change', function () { user = null; apply(); });
+    apply();
+  }
   // courses carousel: --pos rotates the three cards around the active one
   var track = document.querySelector('.mh-course-track');
   if (track) {
